@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPG Helper - Seu Assistente de RPG</title>
+    <style>
+        :root {
+            --primary: #8B4513;
+            --secondary: #D2691E;
+            --accent: #CD853F;
+            --light: #F5DEB3;
+            --dark: #3E2723;
+            --text: #2E1A12;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: var(--secondary);
+            padding: 0.5rem;
+        }
+        
+        nav button {
+            background: none;
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            margin: 0 0.5rem;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        nav button:hover {
+            background-color: var(--accent);
+        }
+        
+        nav button.active {
+            background-color: var(--dark);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 1.5rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 1rem;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 0.5rem;
+        }
+        
+        .character-sheet {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+        
+        .character-card {
+            background-color: var(--light);
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .character-card h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .character-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.25rem 0;
+        }
+        
+        .dice-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+        
+        .dice {
+            width: 60px;
+            height: 60px;
+            background-color: white;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dice:hover {
+            transform: scale(1.1);
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .dice-result {
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            text-align: center;
+            min-height: 2rem;
+        }
+        
+        .initiative-tracker {
+            margin-top: 1rem;
+        }
+        
+        .initiative-list {
+            list-style-type: none;
+            margin-top: 1rem;
+        }
+        
+        .initiative-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem;
+            background-color: var(--light);
+            margin-bottom: 0.5rem;
+            border-radius: 4px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .current-turn {
+            background-color: var(--accent);
+            color: white;
+            font-weight: bold;
+        }
+        
+        .notes-section {
+            margin-top: 1rem;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 0.75rem;
+            border: 1px solid var(--accent);
+            border-radius: 4px;
+            resize: vertical;
+        }
+        
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: var(--secondary);
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--accent);
+            border-radius: 4px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+            background-color: var(--dark);
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .character-sheet {
+                grid-template-columns: 1fr;
+            }
+            
+            nav {
+                flex-wrap: wrap;
+            }
+            
+            nav button {
+                margin: 0.25rem;
+                flex: 1;
+                min-width: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>RPG Helper</h1>
+        <p>Seu assistente para sessões de RPG com amigos</p>
+    </header>
+    
+    <nav>
+        <button class="nav-btn active" data-tab="characters">Personagens</button>
+        <button class="nav-btn" data-tab="dice">Dados</button>
+        <button class="nav-btn" data-tab="initiative">Iniciativa</button>
+        <button class="nav-btn" data-tab="notes">Anotações</button>
+    </nav>
+    
+    <div class="container">
+        <!-- Aba de Personagens -->
+        <div id="characters" class="tab-content active">
+            <div class="tab-header">
+                <h2>Fichas de Personagens</h2>
+                <button id="add-character">Adicionar Personagem</button>
+            </div>
+            <div class="character-sheet" id="character-list">
+                <!-- Personagens serão adicionados aqui dinamicamente -->
+            </div>
+        </div>
+        
+        <!-- Aba de Dados -->
+        <div id="dice" class="tab-content">
+            <h2>Rolagem de Dados</h2>
+            <div class="dice-container">
+                <div class="dice" data-sides="4">d4</div>
+                <div class="dice" data-sides="6">d6</div>
+                <div class="dice" data-sides="8">d8</div>
+                <div class="dice" data-sides="10">d10</div>
+                <div class="dice" data-sides="12">d12</div>
+                <div class="dice" data-sides="20">d20</div>
+                <div class="dice" data-sides="100">d100</div>
+            </div>
+            <div class="dice-result" id="dice-result"></div>
+            
+            <div class="custom-roll">
+                <h3>Rolagem Personalizada</h3>
+                <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                    <input type="number" id="custom-dice-count" min="1" max="10" value="1" style="width: 60px;">
+                    <span style="display: flex; align-items: center;">d</span>
+                    <input type="number" id="custom-dice-sides" min="2" max="100" value="6" style="width: 80px;">
+                    <button id="custom-roll">Rolar</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Aba de Iniciativa -->
+        <div id="initiative" class="tab-content">
+            <h2>Controle de Iniciativa</h2>
+            <div class="initiative-controls">
+                <button id="add-to-initiative">Adicionar à Iniciativa</button>
+                <button id="next-turn">Próximo Turno</button>
+                <button id="reset-initiative">Reiniciar</button>
+            </div>
+            <div class="initiative-tracker">
+                <ul class="initiative-list" id="initiative-list">
+                    <!-- Itens de iniciativa serão adicionados aqui -->
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Aba de Anotações -->
+        <div id="notes" class="tab-content">
+            <h2>Anotações da Sessão</h2>
+            <div class="notes-section">
+                <textarea id="session-notes" placeholder="Anote aqui informações importantes da sessão, como tesouros encontrados, NPCs conhecidos, objetivos da missão..."></textarea>
+                <button id="save-notes" style="margin-top: 0.5rem;">Salvar Anotações</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para adicionar/editar personagem -->
+    <div id="character-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Adicionar Personagem</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="character-form">
+                <input type="hidden" id="character-id">
+                <div class="form-group">
+                    <label for="character-name">Nome</label>
+                    <input type="text" id="character-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="character-class">Classe</label>
+                    <input type="text" id="character-class">
+                </div>
+                <div class="form-group">
+                    <label for="character-level">Nível</label>
+                    <input type="number" id="character-level" min="1" max="20" value="1">
+                </div>
+                <div class="form-group">
+                    <label for="character-hp">Pontos de Vida</label>
+                    <input type="number" id="character-hp" min="0" value="10">
+                </div>
+                <div class="form-group">
+                    <label for="character-ac">Classe de Armadura</label>
+                    <input type="number" id="character-ac" min="0" value="10">
+                </div>
+                <div class="form-group">
+                    <button type="submit">Salvar Personagem</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal para adicionar à iniciativa -->
+    <div id="initiative-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Adicionar à Iniciativa</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="initiative-name">Nome</label>
+                <input type="text" id="initiative-name" required>
+            </div>
+            <div class="form-group">
+                <label for="initiative-roll">Valor da Iniciativa</label>
+                <input type="number" id="initiative-roll" min="1" max="50" required>
+            </div>
+            <div class="form-group">
+                <button id="add-initiative">Adicionar</button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>RPG Helper &copy; 2023 - Criado para melhorar suas sessões de RPG</p>
+    </footer>
+
+    <script>
+        // Dados da aplicação
+        let characters = JSON.parse(localStorage.getItem('rpgCharacters')) || [];
+        let notes = localStorage.getItem('rpgNotes') || '';
+        let initiativeList = JSON.parse(localStorage.getItem('rpgInitiative')) || [];
+        let currentTurn = 0;
+        
+        // Elementos DOM
+        const tabContents = document.querySelectorAll('.tab-content');
+        const navButtons = document.querySelectorAll('.nav-btn');
+        const characterList = document.getElementById('character-list');
+        const characterModal = document.getElementById('character-modal');
+        const initiativeModal = document.getElementById('initiative-modal');
+        const characterForm = document.getElementById('character-form');
+        const diceElements = document.querySelectorAll('.dice');
+        const diceResult = document.getElementById('dice-result');
+        const customRollBtn = document.getElementById('custom-roll');
+        const sessionNotes = document.getElementById('session-notes');
+        const saveNotesBtn = document.getElementById('save-notes');
+        const initiativeListEl = document.getElementById('initiative-list');
+        const addToInitiativeBtn = document.getElementById('add-to-initiative');
+        const nextTurnBtn = document.getElementById('next-turn');
+        const resetInitiativeBtn = document.getElementById('reset-initiative');
+        const addInitiativeBtn = document.getElementById('add-initiative');
+        
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            // Carregar dados salvos
+            loadCharacters();
+            loadNotes();
+            loadInitiative();
+            
+            // Navegação entre abas
+            navButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Atualizar botões ativos
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Atualizar conteúdo visível
+                    tabContents.forEach(tab => tab.classList.remove('active'));
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Botão para adicionar personagem
+            document.getElementById('add-character').addEventListener('click', function() {
+                openCharacterModal();
+            });
+            
+            // Fechar modais
+            document.querySelectorAll('.close-modal').forEach(button => {
+                button.addEventListener('click', function() {
+                    characterModal.style.display = 'none';
+                    initiativeModal.style.display = 'none';
+                });
+            });
+            
+            // Rolagem de dados
+            diceElements.forEach(dice => {
+                dice.addEventListener('click', function() {
+                    const sides = parseInt(this.getAttribute('data-sides'));
+                    rollDice(1, sides);
+                });
+            });
+            
+            // Rolagem personalizada
+            customRollBtn.addEventListener('click', function() {
+                const count = parseInt(document.getElementById('custom-dice-count').value);
+                const sides = parseInt(document.getElementById('custom-dice-sides').value);
+                rollDice(count, sides);
+            });
+            
+            // Salvar anotações
+            saveNotesBtn.addEventListener('click', function() {
+                saveNotes();
+            });
+            
+            // Controle de iniciativa
+            addToInitiativeBtn.addEventListener('click', function() {
+                initiativeModal.style.display = 'flex';
+            });
+            
+            addInitiativeBtn.addEventListener('click', function() {
+                addToInitiative();
+            });
+            
+            nextTurnBtn.addEventListener('click', function() {
+                nextTurn();
+            });
+            
+            resetInitiativeBtn.addEventListener('click', function() {
+                resetInitiative();
+            });
+            
+            // Fechar modal ao clicar fora
+            window.addEventListener('click', function(event) {
+                if (event.target === characterModal) {
+                    characterModal.style.display = 'none';
+                }
+                if (event.target === initiativeModal) {
+                    initiativeModal.style.display = 'none';
+                }
+            });
+        });
+        
+        // Funções para personagens
+        function loadCharacters() {
+            characterList.innerHTML = '';
+            
+            if (characters.length === 0) {
+                characterList.innerHTML = '<p>Nenhum personagem cadastrado. Clique em "Adicionar Personagem" para começar.</p>';
+                return;
+            }
+            
+            characters.forEach((character, index) => {
+                const characterCard = document.createElement('div');
+                characterCard.className = 'character-card';
+                characterCard.innerHTML = `
+                    <h3>${character.name}</h3>
+                    <p><strong>Classe:</strong> ${character.class || 'Não definida'}</p>
+                    <p><strong>Nível:</strong> ${character.level}</p>
+                    <div class="character-stats">
+                        <div class="stat">
+                            <span>PV:</span>
+                            <span>${character.hp}</span>
+                        </div>
+                        <div class="stat">
+                            <span>CA:</span>
+                            <span>${character.ac}</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <button onclick="editCharacter(${index})">Editar</button>
+                        <button onclick="deleteCharacter(${index})" style="background-color: #d9534f;">Excluir</button>
+                    </div>
+                `;
+                characterList.appendChild(characterCard);
+            });
+        }
+        
+        function openCharacterModal(character = null) {
+            const modalTitle = document.getElementById('modal-title');
+            const characterId = document.getElementById('character-id');
+            const characterName = document.getElementById('character-name');
+            const characterClass = document.getElementById('character-class');
+            const characterLevel = document.getElementById('character-level');
+            const characterHp = document.getElementById('character-hp');
+            const characterAc = document.getElementById('character-ac');
+            
+            if (character) {
+                modalTitle.textContent = 'Editar Personagem';
+                characterId.value = character.index;
+                characterName.value = character.name;
+                characterClass.value = character.class;
+                characterLevel.value = character.level;
+                characterHp.value = character.hp;
+                characterAc.value = character.ac;
+            } else {
+                modalTitle.textContent = 'Adicionar Personagem';
+                characterForm.reset();
+                characterId.value = '';
+            }
+            
+            characterModal.style.display = 'flex';
+        }
+        
+        characterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const characterId = document.getElementById('character-id').value;
+            const characterData = {
+                name: document.getElementById('character-name').value,
+                class: document.getElementById('character-class').value,
+                level: parseInt(document.getElementById('character-level').value),
+                hp: parseInt(document.getElementById('character-hp').value),
+                ac: parseInt(document.getElementById('character-ac').value)
+            };
+            
+            if (characterId) {
+                // Editar personagem existente
+                characters[characterId] = characterData;
+            } else {
+                // Adicionar novo personagem
+                characters.push(characterData);
+            }
+            
+            saveCharacters();
+            loadCharacters();
+            characterModal.style.display = 'none';
+        });
+        
+        function editCharacter(index) {
+            const character = characters[index];
+            character.index = index;
+            openCharacterModal(character);
+        }
+        
+        function deleteCharacter(index) {
+            if (confirm('Tem certeza que deseja excluir este personagem?')) {
+                characters.splice(index, 1);
+                saveCharacters();
+                loadCharacters();
+            }
+        }
+        
+        function saveCharacters() {
+            localStorage.setItem('rpgCharacters', JSON.stringify(characters));
+        }
+        
+        // Funções para dados
+        function rollDice(count, sides) {
+            let results = [];
+            let total = 0;
+            
+            for (let i = 0; i < count; i++) {
+                const roll = Math.floor(Math.random() * sides) + 1;
+                results.push(roll);
+                total += roll;
+            }
+            
+            let resultText = `Rolagem: ${count}d${sides} = `;
+            
+            if (count > 1) {
+                resultText += `${results.join(' + ')} = ${total}`;
+            } else {
+                resultText += total;
+            }
+            
+            diceResult.textContent = resultText;
+            
+            // Efeito visual
+            diceResult.style.opacity = '0';
+            setTimeout(() => {
+                diceResult.style.opacity = '1';
+            }, 300);
+        }
+        
+        // Funções para anotações
+        function loadNotes() {
+            sessionNotes.value = notes;
+        }
+        
+        function saveNotes() {
+            notes = sessionNotes.value;
+            localStorage.setItem('rpgNotes', notes);
+            alert('Anotações salvas com sucesso!');
+        }
+        
+        // Funções para iniciativa
+        function loadInitiative() {
+            initiativeListEl.innerHTML = '';
+            
+            if (initiativeList.length === 0) {
+                initiativeListEl.innerHTML = '<p>Nenhum participante na iniciativa. Clique em "Adicionar à Iniciativa" para começar.</p>';
+                return;
+            }
+            
+            // Ordenar por iniciativa (maior para menor)
+            initiativeList.sort((a, b) => b.initiative - a.initiative);
+            
+            initiativeList.forEach((item, index) => {
+                const listItem = document.createElement('li');
+                listItem.className = 'initiative-item';
+                if (index === currentTurn) {
+                    listItem.classList.add('current-turn');
+                }
+                listItem.innerHTML = `
+                    <span>${item.name}</span>
+                    <span>Iniciativa: ${item.initiative}</span>
+                `;
+                initiativeListEl.appendChild(listItem);
+            });
+        }
+        
+        function addToInitiative() {
+            const name = document.getElementById('initiative-name').value;
+            const initiative = parseInt(document.getElementById('initiative-roll').value);
+            
+            if (!name || isNaN(initiative)) {
+                alert('Preencha todos os campos corretamente.');
+                return;
+            }
+            
+            initiativeList.push({ name, initiative });
+            saveInitiative();
+            loadInitiative();
+            initiativeModal.style.display = 'none';
+            
+            // Limpar campos
+            document.getElementById('initiative-name').value = '';
+            document.getElementById('initiative-roll').value = '';
+        }
+        
+        function nextTurn() {
+            if (initiativeList.length === 0) return;
+            
+            currentTurn = (currentTurn + 1) % initiativeList.length;
+            saveInitiative();
+            loadInitiative();
+        }
+        
+        function resetInitiative() {
+            if (confirm('Tem certeza que deseja reiniciar a iniciativa?')) {
+                initiativeList = [];
+                currentTurn = 0;
+                saveInitiative();
+                loadInitiative();
+            }
+        }
+        
+        function saveInitiative() {
+            localStorage.setItem('rpgInitiative', JSON.stringify(initiativeList));
+            localStorage.setItem('rpgCurrentTurn', currentTurn.toString());
+        }
+    </script>
+</body>
+</html>
