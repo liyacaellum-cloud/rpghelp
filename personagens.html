@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personagens - RPG Master Ultra</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=MedievalSharp&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notification-text">Operação realizada com sucesso!</span>
+    </div>
+    
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <h1>RPG Master Ultra</h1>
+                <p>Sistema Definitivo de Gerenciamento de RPG</p>
+            </div>
+            
+            <div class="campaign-selector">
+                <label for="campaign">Campanha Ativa:</label>
+                <select id="campaign">
+                    <option value="default">Aventura Principal</option>
+                    <option value="side">Missão Secundária</option>
+                    <option value="new">Nova Campanha</option>
+                </select>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="personagens.html" class="nav-link active">
+                        <i class="fas fa-users"></i>
+                        <span>Personagens</span>
+                        <span class="nav-badge" id="char-count">0</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="dados.html" class="nav-link">
+                        <i class="fas fa-dice-d20"></i>
+                        <span>Mesa de Dados</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="iniciativa.html" class="nav-link">
+                        <i class="fas fa-list-ol"></i>
+                        <span>Iniciativa</span>
+                        <span class="nav-badge" id="init-count">0</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="bestiario.html" class="nav-link">
+                        <i class="fas fa-dragon"></i>
+                        <span>Bestiário</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="magias.html" class="nav-link">
+                        <i class="fas fa-magic"></i>
+                        <span>Grimório</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="anotacoes.html" class="nav-link">
+                        <i class="fas fa-scroll"></i>
+                        <span>Anotações</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="mapas.html" class="nav-link">
+                        <i class="fas fa-map"></i>
+                        <span>Mapas</span>
+                        <span class="nav-badge">Em breve</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="configuracoes.html" class="nav-link">
+                        <i class="fas fa-cog"></i>
+                        <span>Configurações</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h2>Gerenciador de Personagens</h2>
+                <div class="user-actions">
+                    <button class="btn" id="add-character">
+                        <i class="fas fa-plus"></i>
+                        Novo Personagem
+                    </button>
+                    <button class="btn btn-secondary" id="import-character">
+                        <i class="fas fa-file-import"></i>
+                        Importar
+                    </button>
+                    <button class="btn btn-success" id="quick-save">
+                        <i class="fas fa-save"></i>
+                        Salvar
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Filtros e Busca -->
+            <div class="dashboard-card" style="margin-bottom: 1.5rem;">
+                <div class="card-header">
+                    <h3>Filtrar Personagens</h3>
+                    <div class="card-icon">
+                        <i class="fas fa-filter"></i>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <input type="text" id="search-characters" placeholder="Buscar por nome..." style="flex: 1; min-width: 200px;">
+                        <select id="filter-class">
+                            <option value="">Todas as Classes</option>
+                            <option value="Guerreiro">Guerreiro</option>
+                            <option value="Mago">Mago</option>
+                            <option value="Ladino">Ladino</option>
+                            <option value="Clérigo">Clérigo</option>
+                            <option value="Ranger">Ranger</option>
+                            <option value="Bárbaro">Bárbaro</option>
+                        </select>
+                        <select id="filter-level">
+                            <option value="">Todos os Níveis</option>
+                            <option value="1-5">1-5</option>
+                            <option value="6-10">6-10</option>
+                            <option value="11-15">11-15</option>
+                            <option value="16-20">16-20</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Lista de Personagens -->
+            <div class="character-grid" id="character-list">
+                <!-- Personagens serão carregados aqui via JavaScript -->
+            </div>
+            
+            <footer>
+                <p>RPG Master Ultra &copy; 2023 - Sistema Definitivo de Gerenciamento de RPG</p>
+            </footer>
+        </div>
+    </div>
+    
+    <!-- Modal para Adicionar/Editar Personagem -->
+    <div id="character-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-character-title">Adicionar Personagem</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="character-form">
+                <input type="hidden" id="character-id">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="character-name">Nome *</label>
+                        <input type="text" id="character-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="character-class">Classe</label>
+                        <input type="text" id="character-class" placeholder="ex: Guerreiro, Mago...">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="character-race">Raça</label>
+                        <input type="text" id="character-race" placeholder="ex: Humano, Elfo...">
+                    </div>
+                    <div class="form-group">
+                        <label for="character-level">Nível *</label>
+                        <input type="number" id="character-level" min="1" max="20" value="1" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="character-hp">Pontos de Vida *</label>
+                        <input type="number" id="character-hp" min="0" value="10" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="character-max-hp">PV Máximos *</label>
+                        <input type="number" id="character-max-hp" min="1" value="10" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="character-ac">Classe de Armadura *</label>
+                        <input type="number" id="character-ac" min="0" value="10" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="character-speed">Deslocamento</label>
+                        <input type="number" id="character-speed" min="0" value="30">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="character-description">Descrição &amp; Anotações</label>
+                    <textarea id="character-description" rows="3" placeholder="História, personalidade, equipamentos..."></textarea>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn" style="width: 100%;">
+                        <i class="fas fa-save"></i>
+                        Salvar Personagem
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/characters.js"></script>
+</body>
+</html>
