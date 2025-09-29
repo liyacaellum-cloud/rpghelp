@@ -40,7 +40,7 @@ function initParticles() {
         particle.style.height = `${size}px`;
         
         // Cor aleatória
-        const colors = ['var(--gold)', 'var(--accent)', 'var(--magic)', 'var(--bronze)'];
+        const colors = ['#ffd700', '#e94560', '#9b59b6', '#cd7f32'];
         const color = colors[Math.floor(Math.random() * colors.length)];
         particle.style.backgroundColor = color;
         
@@ -97,6 +97,7 @@ function exportData(data, filename = 'rpg-data.json') {
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
         
+        showNotification('Dados exportados com sucesso!');
         return true;
     } catch (e) {
         console.error('Erro ao exportar dados:', e);
@@ -166,12 +167,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
-    
-    // Atualizar URL atual no footer (se existir)
-    const currentUrlElement = document.getElementById('current-url');
-    if (currentUrlElement) {
-        currentUrlElement.textContent = `URL: ${window.location.href}`;
-    }
 });
 
 // Validação de formulários
