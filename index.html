@@ -3,228 +3,886 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RPG Helper - Seu Assistente de RPG</title>
+    <title>RPG Master Ultra - Sistema de RPG Definitivo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=MedievalSharp&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #8B4513;
-            --secondary: #D2691E;
-            --accent: #CD853F;
-            --light: #F5DEB3;
-            --dark: #3E2723;
-            --text: #2E1A12;
+            --primary: #0a0a1a;
+            --secondary: #1a1a2e;
+            --accent: #e94560;
+            --accent-light: #f39c12;
+            --gold: #ffd700;
+            --gold-light: #ffed4e;
+            --light: #f0f0f0;
+            --dark: #050510;
+            --text: #e6e6e6;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --magic: #9b59b6;
+            --health: #e74c3c;
+            --mana: #3498db;
+            --stamina: #2ecc71;
+            --bronze: #cd7f32;
+            --silver: #c0c0c0;
+            --platinum: #e5e4e2;
         }
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Roboto', sans-serif;
         }
         
         body {
-            background-color: var(--light);
+            background: linear-gradient(135deg, #050510, #0a0a1a, #1a1a2e);
             color: var(--text);
             line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
         
-        header {
-            background-color: var(--primary);
-            color: white;
-            padding: 1rem;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
-        nav {
+        .app-container {
             display: flex;
-            justify-content: center;
-            background-color: var(--secondary);
-            padding: 0.5rem;
+            min-height: 100vh;
         }
         
-        nav button {
-            background: none;
-            border: none;
-            color: white;
-            padding: 0.5rem 1rem;
-            margin: 0 0.5rem;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: background-color 0.3s;
+        /* Sidebar Estilo Medieval Premium */
+        .sidebar {
+            width: 300px;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 1.5rem 1rem;
+            box-shadow: 5px 0 25px rgba(0, 0, 0, 0.6);
+            z-index: 100;
+            border-right: 3px solid var(--bronze);
+            position: relative;
+            overflow-y: auto;
+            transition: all 0.3s ease;
         }
         
-        nav button:hover {
-            background-color: var(--accent);
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--gold), var(--accent), transparent);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
         }
         
-        nav button.active {
-            background-color: var(--dark);
+        .sidebar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            width: 1px;
+            background: linear-gradient(180deg, transparent, var(--bronze), transparent);
         }
         
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid rgba(205, 127, 50, 0.4);
+            position: relative;
+        }
+        
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 25%;
+            width: 50%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+        
+        .logo h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+            letter-spacing: 3px;
+            font-weight: 700;
+        }
+        
+        .logo p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-style: italic;
+            font-family: 'MedievalSharp', cursive;
+        }
+        
+        .campaign-selector {
+            margin-bottom: 2rem;
             padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            border: 1px solid var(--bronze);
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
         }
         
-        .tab-content {
-            display: none;
-            padding: 1.5rem;
-            background-color: white;
+        .campaign-selector select {
+            width: 100%;
+            padding: 0.7rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--bronze);
+            border-radius: 5px;
+            color: white;
+            font-weight: 500;
+        }
+        
+        .nav-menu {
+            list-style: none;
+        }
+        
+        .nav-item {
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.9rem 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-top: 1rem;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+            background: rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
         }
         
-        .tab-content.active {
-            display: block;
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: 0.5s;
         }
         
-        h2 {
-            color: var(--primary);
-            margin-bottom: 1rem;
-            border-bottom: 2px solid var(--accent);
-            padding-bottom: 0.5rem;
+        .nav-link:hover::before {
+            left: 100%;
         }
         
-        .character-sheet {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        .nav-link:hover, .nav-link.active {
+            background: linear-gradient(90deg, rgba(205, 127, 50, 0.3), transparent);
+            color: var(--gold);
+            border-left: 4px solid var(--gold);
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-link i {
+            margin-right: 0.75rem;
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .nav-badge {
+            background: linear-gradient(135deg, var(--accent), #c0392b);
+            color: white;
+            border-radius: 12px;
+            padding: 0.2rem 0.6rem;
+            font-size: 0.7rem;
+            margin-left: auto;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(41, 128, 185, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(231, 76, 60, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(155, 89, 182, 0.1) 0%, transparent 50%),
+                url('https://www.transparenttextures.com/patterns/old-map.png');
+            background-blend-mode: overlay;
+            background-color: rgba(10, 10, 20, 0.95);
+            position: relative;
+        }
+        
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(45deg, transparent 48%, rgba(255, 215, 0, 0.03) 50%, transparent 52%),
+                linear-gradient(-45deg, transparent 48%, rgba(255, 215, 0, 0.03) 50%, transparent 52%);
+            background-size: 30px 30px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.2rem;
+            border-bottom: 2px solid rgba(205, 127, 50, 0.4);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 150px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--gold), transparent);
+        }
+        
+        .header h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.2rem;
+            color: var(--gold);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            letter-spacing: 1px;
+        }
+        
+        .user-actions {
+            display: flex;
             gap: 1rem;
         }
         
-        .character-card {
-            background-color: var(--light);
-            border: 1px solid var(--accent);
+        .btn {
+            background: linear-gradient(135deg, var(--accent), #c0392b);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
             border-radius: 8px;
-            padding: 1rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
         }
         
-        .character-card h3 {
-            color: var(--primary);
-            margin-bottom: 0.5rem;
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+            z-index: -1;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--secondary), #1a237e);
+        }
+        
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold), #ff9800);
+        }
+        
+        .btn-magic {
+            background: linear-gradient(135deg, var(--magic), #6a1b9a);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #219653);
+        }
+        
+        /* Dashboard */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .dashboard-card {
+            background: linear-gradient(145deg, rgba(40, 40, 60, 0.9), rgba(20, 20, 40, 0.95));
+            border-radius: 12px;
+            padding: 1.8rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(205, 127, 50, 0.3);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+        
+        .dashboard-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--gold), var(--magic));
+        }
+        
+        .dashboard-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at top right, rgba(255, 215, 0, 0.1), transparent 70%);
+            pointer-events: none;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+        }
+        
+        .card-header h3 {
+            font-size: 1.3rem;
+            color: var(--gold);
+            font-family: 'Cinzel', serif;
+            letter-spacing: 1px;
+        }
+        
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(233, 69, 96, 0.5);
+        }
+        
+        .card-icon i {
+            color: white;
+            font-size: 1.3rem;
+        }
+        
+        .card-content {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1.2rem;
+        }
+        
+        .stat-item {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.2s;
+        }
+        
+        .stat-item:hover {
+            transform: scale(1.05);
+            border-color: rgba(205, 127, 50, 0.5);
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--gold);
+            display: block;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+        }
+        
+        .stat-label {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 0.3rem;
+        }
+        
+        /* Character Grid */
+        .character-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.8rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .character-card {
+            background: linear-gradient(145deg, rgba(40, 40, 60, 0.9), rgba(20, 20, 40, 0.95));
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(205, 127, 50, 0.3);
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+        
+        .character-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--gold));
+        }
+        
+        .character-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at top left, rgba(233, 69, 96, 0.1), transparent 70%);
+            pointer-events: none;
+        }
+        
+        .character-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .character-header {
+            background: linear-gradient(90deg, rgba(30, 30, 50, 0.95), rgba(50, 50, 80, 0.95));
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgba(205, 127, 50, 0.3);
+            position: relative;
+        }
+        
+        .character-header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+        
+        .character-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--gold);
+            font-family: 'Cinzel', serif;
+            letter-spacing: 1px;
+        }
+        
+        .character-class {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-style: italic;
+            margin-top: 0.3rem;
+        }
+        
+        .character-level {
+            background: linear-gradient(135deg, var(--accent), #c0392b);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        .character-body {
+            padding: 1.5rem;
         }
         
         .character-stats {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.2rem;
         }
         
         .stat {
             display: flex;
             justify-content: space-between;
-            padding: 0.25rem 0;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s;
+        }
+        
+        .stat:hover {
+            border-color: rgba(205, 127, 50, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .stat-value {
+            font-weight: 700;
+            color: var(--accent-light);
+            font-size: 1.1rem;
+        }
+        
+        .resource-bars {
+            margin: 1.2rem 0;
+        }
+        
+        .resource-bar {
+            margin-bottom: 1rem;
+        }
+        
+        .resource-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+        
+        .bar-container {
+            height: 12px;
+            border-radius: 6px;
+            background-color: rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        .health-bar {
+            background: linear-gradient(90deg, var(--health), #c0392b);
+        }
+        
+        .mana-bar {
+            background: linear-gradient(90deg, var(--mana), #2980b9);
+        }
+        
+        .stamina-bar {
+            background: linear-gradient(90deg, var(--stamina), #27ae60);
+        }
+        
+        .character-actions {
+            display: flex;
+            gap: 0.7rem;
+            margin-top: 1.5rem;
+        }
+        
+        .action-btn {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            padding: 0.7rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            font-weight: 500;
+        }
+        
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        /* Dice Section */
+        .dice-section {
+            background: linear-gradient(145deg, rgba(40, 40, 60, 0.9), rgba(20, 20, 40, 0.95));
+            border-radius: 12px;
+            padding: 1.8rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(205, 127, 50, 0.3);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(5px);
         }
         
         .dice-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 1rem;
+            gap: 1.2rem;
             justify-content: center;
-            margin: 1rem 0;
+            margin: 1.8rem 0;
         }
         
         .dice {
-            width: 60px;
-            height: 60px;
-            background-color: white;
-            border: 2px solid var(--primary);
-            border-radius: 10px;
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(145deg, #2c3e50, #34495e);
+            border-radius: 12px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.5rem;
+            font-size: 2rem;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.3s, background-color 0.3s;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            box-shadow: 
+                5px 5px 10px rgba(0, 0, 0, 0.3),
+                -5px -5px 10px rgba(255, 255, 255, 0.05);
+            color: var(--light);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .dice::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transform: rotate(45deg);
+            transition: all 0.5s;
+        }
+        
+        .dice:hover::before {
+            transform: rotate(45deg) translate(10px, 10px);
         }
         
         .dice:hover {
-            transform: scale(1.1);
-            background-color: var(--accent);
-            color: white;
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 0 25px var(--accent);
+        }
+        
+        .dice-rolling {
+            animation: roll 0.5s ease-in-out;
+        }
+        
+        @keyframes roll {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
         
         .dice-result {
-            font-size: 1.2rem;
-            margin-top: 1rem;
+            font-size: 2rem;
             text-align: center;
-            min-height: 2rem;
+            margin-top: 1.2rem;
+            min-height: 3.5rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            border: 1px solid rgba(205, 127, 50, 0.4);
+            font-weight: bold;
+            color: var(--gold);
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
         }
         
+        .custom-roll {
+            display: flex;
+            gap: 0.7rem;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1.8rem;
+            flex-wrap: wrap;
+        }
+        
+        .custom-roll input {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            padding: 0.8rem;
+            color: white;
+            width: 90px;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        .roll-history {
+            margin-top: 1.8rem;
+            max-height: 200px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .roll-history-item {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .roll-time {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8rem;
+        }
+        
+        /* Initiative Tracker */
         .initiative-tracker {
-            margin-top: 1rem;
+            background: linear-gradient(145deg, rgba(40, 40, 60, 0.9), rgba(20, 20, 40, 0.95));
+            border-radius: 12px;
+            padding: 1.8rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(205, 127, 50, 0.3);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(5px);
         }
         
         .initiative-list {
-            list-style-type: none;
-            margin-top: 1rem;
+            list-style: none;
+            margin-top: 1.2rem;
         }
         
         .initiative-item {
             display: flex;
             justify-content: space-between;
-            padding: 0.75rem;
-            background-color: var(--light);
-            margin-bottom: 0.5rem;
-            border-radius: 4px;
-            border-left: 4px solid var(--primary);
+            align-items: center;
+            padding: 1.2rem 1.5rem;
+            background: rgba(0, 0, 0, 0.4);
+            margin-bottom: 0.8rem;
+            border-radius: 8px;
+            border-left: 5px solid var(--accent);
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .initiative-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transition: 0.5s;
+        }
+        
+        .initiative-item:hover::before {
+            left: 100%;
         }
         
         .current-turn {
-            background-color: var(--accent);
-            color: white;
-            font-weight: bold;
+            background: linear-gradient(90deg, rgba(233, 69, 96, 0.3), transparent);
+            border-left: 5px solid var(--accent-light);
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
         
+        .initiative-name {
+            font-weight: 700;
+            color: var(--gold);
+            font-size: 1.1rem;
+        }
+        
+        .initiative-value {
+            background: linear-gradient(135deg, var(--accent), #c0392b);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Notes Section */
         .notes-section {
-            margin-top: 1rem;
+            background: linear-gradient(145deg, rgba(40, 40, 60, 0.9), rgba(20, 20, 40, 0.95));
+            border-radius: 12px;
+            padding: 1.8rem;
+            border: 1px solid rgba(205, 127, 50, 0.3);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(5px);
         }
         
         textarea {
             width: 100%;
-            min-height: 150px;
-            padding: 0.75rem;
-            border: 1px solid var(--accent);
-            border-radius: 4px;
+            min-height: 300px;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
             resize: vertical;
-        }
-        
-        button {
-            background-color: var(--primary);
             color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
+            font-size: 1rem;
+            line-height: 1.6;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
         }
         
-        button:hover {
-            background-color: var(--secondary);
-        }
-        
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-        }
-        
-        input, select {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid var(--accent);
-            border-radius: 4px;
-        }
-        
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -232,175 +890,948 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.9);
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 2000;
+            backdrop-filter: blur(5px);
         }
         
         .modal-content {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 8px;
+            background: linear-gradient(145deg, rgba(40, 40, 60, 0.98), rgba(20, 20, 40, 0.99));
+            padding: 2.5rem;
+            border-radius: 12px;
             width: 90%;
-            max-width: 500px;
+            max-width: 700px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            border: 2px solid rgba(205, 127, 50, 0.5);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
+        }
+        
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--gold), var(--magic));
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
         }
         
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
+            margin-bottom: 1.8rem;
+            padding-bottom: 1.2rem;
+            border-bottom: 2px solid rgba(205, 127, 50, 0.4);
+        }
+        
+        .modal-title {
+            font-size: 1.8rem;
+            color: var(--gold);
+            font-family: 'Cinzel', serif;
+            letter-spacing: 1px;
         }
         
         .close-modal {
             background: none;
             border: none;
-            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.8rem;
             cursor: pointer;
+            transition: color 0.3s;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
         }
         
+        .close-modal:hover {
+            color: var(--accent);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 1.8rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.7rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 1.2rem;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        /* Footer */
         footer {
             text-align: center;
-            padding: 1rem;
-            margin-top: 2rem;
-            background-color: var(--dark);
-            color: white;
+            padding: 2.5rem 1rem;
+            margin-top: 4rem;
+            border-top: 2px solid rgba(205, 127, 50, 0.4);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .sidebar {
+                width: 260px;
+            }
+            
+            .character-grid {
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 240px;
+            }
+            
+            .dashboard {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
         }
         
         @media (max-width: 768px) {
-            .character-sheet {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                padding: 1rem;
+            }
+            
+            .nav-menu {
+                display: flex;
+                overflow-x: auto;
+                padding-bottom: 0.5rem;
+            }
+            
+            .nav-item {
+                margin-bottom: 0;
+                margin-right: 1rem;
+                flex-shrink: 0;
+            }
+            
+            .nav-link {
+                white-space: nowrap;
+            }
+            
+            .dashboard {
                 grid-template-columns: 1fr;
             }
             
-            nav {
-                flex-wrap: wrap;
+            .character-grid {
+                grid-template-columns: 1fr;
             }
             
-            nav button {
-                margin: 0.25rem;
-                flex: 1;
-                min-width: 120px;
+            .form-row {
+                flex-direction: column;
+                gap: 0;
             }
+            
+            .dice {
+                width: 80px;
+                height: 80px;
+                font-size: 1.8rem;
+            }
+            
+            .user-actions {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .main-content {
+                padding: 1.5rem;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .header::after {
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100px;
+            }
+            
+            .dice {
+                width: 70px;
+                height: 70px;
+                font-size: 1.6rem;
+            }
+            
+            .custom-roll {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .custom-roll input {
+                width: 100%;
+            }
+        }
+        
+        /* Scrollbar personalizado */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--bronze), var(--gold));
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--gold), var(--accent-light));
+        }
+        
+        /* Animações */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        /* Efeito de partículas */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float linear infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(calc(var(--x) * 1px), calc(var(--y) * 1px)) rotate(90deg); }
+            50% { transform: translate(calc(var(--x) * 2px), calc(var(--y) * 2px)) rotate(180deg); }
+            75% { transform: translate(calc(var(--x) * 1px), calc(var(--y) * 1px)) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+        
+        /* Notificações */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, var(--success), #219653);
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 3000;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.error {
+            background: linear-gradient(135deg, var(--danger), #c0392b);
+        }
+        
+        .notification.warning {
+            background: linear-gradient(135deg, var(--warning), #e67e22);
+        }
+        
+        /* Loading Spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--gold);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Tabs personalizadas */
+        .tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid rgba(205, 127, 50, 0.3);
+        }
+        
+        .tab {
+            padding: 0.8rem 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 8px 8px 0 0;
+            font-weight: 500;
+            position: relative;
+        }
+        
+        .tab.active {
+            background: rgba(205, 127, 50, 0.2);
+            color: var(--gold);
+        }
+        
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gold);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>RPG Helper</h1>
-        <p>Seu assistente para sessões de RPG com amigos</p>
-    </header>
+    <div class="particles" id="particles"></div>
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notification-text">Operação realizada com sucesso!</span>
+    </div>
     
-    <nav>
-        <button class="nav-btn active" data-tab="characters">Personagens</button>
-        <button class="nav-btn" data-tab="dice">Dados</button>
-        <button class="nav-btn" data-tab="initiative">Iniciativa</button>
-        <button class="nav-btn" data-tab="notes">Anotações</button>
-    </nav>
-    
-    <div class="container">
-        <!-- Aba de Personagens -->
-        <div id="characters" class="tab-content active">
-            <div class="tab-header">
-                <h2>Fichas de Personagens</h2>
-                <button id="add-character">Adicionar Personagem</button>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <h1>RPG Master Ultra</h1>
+                <p>Sistema Definitivo de Gerenciamento de RPG</p>
             </div>
-            <div class="character-sheet" id="character-list">
-                <!-- Personagens serão adicionados aqui dinamicamente -->
+            
+            <div class="campaign-selector">
+                <label for="campaign">Campanha Ativa:</label>
+                <select id="campaign">
+                    <option value="default">Aventura Principal</option>
+                    <option value="side">Missão Secundária</option>
+                    <option value="new">Nova Campanha</option>
+                </select>
             </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active" data-tab="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                        <span class="nav-badge">Novo</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-tab="characters">
+                        <i class="fas fa-users"></i>
+                        <span>Personagens</span>
+                        <span class="nav-badge" id="char-count">0</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-tab="dice">
+                        <i class="fas fa-dice-d20"></i>
+                        <span>Mesa de Dados</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-tab="initiative">
+                        <i class="fas fa-list-ol"></i>
+                        <span>Iniciativa</span>
+                        <span class="nav-badge" id="init-count">0</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-tab="bestiary">
+                        <i class="fas fa-dragon"></i>
+                        <span>Bestiário</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-tab="spells">
+                        <i class="fas fa-magic"></i>
+                        <span>Grimório</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-tab="notes">
+                        <i class="fas fa-scroll"></i>
+                        <span>Anotações</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-tab="maps">
+                        <i class="fas fa-map"></i>
+                        <span>Mapas</span>
+                        <span class="nav-badge">Em breve</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-tab="settings">
+                        <i class="fas fa-cog"></i>
+                        <span>Configurações</span>
+                    </a>
+                </li>
+            </ul>
         </div>
         
-        <!-- Aba de Dados -->
-        <div id="dice" class="tab-content">
-            <h2>Rolagem de Dados</h2>
-            <div class="dice-container">
-                <div class="dice" data-sides="4">d4</div>
-                <div class="dice" data-sides="6">d6</div>
-                <div class="dice" data-sides="8">d8</div>
-                <div class="dice" data-sides="10">d10</div>
-                <div class="dice" data-sides="12">d12</div>
-                <div class="dice" data-sides="20">d20</div>
-                <div class="dice" data-sides="100">d100</div>
-            </div>
-            <div class="dice-result" id="dice-result"></div>
-            
-            <div class="custom-roll">
-                <h3>Rolagem Personalizada</h3>
-                <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
-                    <input type="number" id="custom-dice-count" min="1" max="10" value="1" style="width: 60px;">
-                    <span style="display: flex; align-items: center;">d</span>
-                    <input type="number" id="custom-dice-sides" min="2" max="100" value="6" style="width: 80px;">
-                    <button id="custom-roll">Rolar</button>
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h2 id="page-title">Dashboard</h2>
+                <div class="user-actions">
+                    <button class="btn btn-gold" id="quick-roll">
+                        <i class="fas fa-dice-d20"></i>
+                        Rolar d20
+                    </button>
+                    <button class="btn btn-secondary" id="save-data">
+                        <i class="fas fa-save"></i>
+                        Salvar Tudo
+                    </button>
+                    <button class="btn btn-magic" id="export-data">
+                        <i class="fas fa-file-export"></i>
+                        Exportar
+                    </button>
                 </div>
             </div>
-        </div>
-        
-        <!-- Aba de Iniciativa -->
-        <div id="initiative" class="tab-content">
-            <h2>Controle de Iniciativa</h2>
-            <div class="initiative-controls">
-                <button id="add-to-initiative">Adicionar à Iniciativa</button>
-                <button id="next-turn">Próximo Turno</button>
-                <button id="reset-initiative">Reiniciar</button>
+            
+            <!-- Dashboard -->
+            <div id="dashboard" class="tab-content active fade-in">
+                <div class="dashboard">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Resumo da Campanha</h3>
+                            <div class="card-icon">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <p>Bem-vindo à sua aventura épica! Aqui está um resumo do progresso atual.</p>
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <span class="stat-value" id="total-chars">0</span>
+                                    <span class="stat-label">Personagens</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-value" id="active-init">0</span>
+                                    <span class="stat-label">Em Combate</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-value" id="session-time">0h</span>
+                                    <span class="stat-label">Duração</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-value" id="total-rolls">0</span>
+                                    <span class="stat-label">Rolagens</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Próximo na Iniciativa</h3>
+                            <div class="card-icon">
+                                <i class="fas fa-list-ol"></i>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <p id="next-initiative">Nenhum combate ativo</p>
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <span class="stat-value" id="current-turn">-</span>
+                                    <span class="stat-label">Turno Atual</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-value" id="round-count">1</span>
+                                    <span class="stat-label">Rodada</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary" style="margin-top: 1rem; width: 100%;" id="go-to-initiative">
+                                <i class="fas fa-arrow-right"></i>
+                                Gerenciar Iniciativa
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Rolagem Rápida</h3>
+                            <div class="card-icon">
+                                <i class="fas fa-dice"></i>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <p>Clique para rolar dados rapidamente</p>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap;">
+                                <button class="action-btn" data-quick-roll="d20">d20</button>
+                                <button class="action-btn" data-quick-roll="d6">d6</button>
+                                <button class="action-btn" data-quick-roll="2d6">2d6</button>
+                                <button class="action-btn" data-quick-roll="d100">d100</button>
+                                <button class="action-btn" data-quick-roll="4d6k3">4d6k3</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="header" style="margin-top: 2rem;">
+                    <h2>Personagens da Campanha</h2>
+                    <button class="btn" id="add-character-dash">
+                        <i class="fas fa-plus"></i>
+                        Novo Personagem
+                    </button>
+                </div>
+                <div class="character-grid" id="dashboard-characters">
+                    <!-- Character cards will be loaded here -->
+                </div>
             </div>
-            <div class="initiative-tracker">
-                <ul class="initiative-list" id="initiative-list">
-                    <!-- Itens de iniciativa serão adicionados aqui -->
-                </ul>
+            
+            <!-- Characters -->
+            <div id="characters" class="tab-content fade-in">
+                <div class="header">
+                    <h2>Gerenciador de Personagens</h2>
+                    <div class="user-actions">
+                        <button class="btn" id="add-character">
+                            <i class="fas fa-plus"></i>
+                            Novo Personagem
+                        </button>
+                        <button class="btn btn-secondary" id="import-character">
+                            <i class="fas fa-file-import"></i>
+                            Importar
+                        </button>
+                    </div>
+                </div>
+                <div class="character-grid" id="character-list">
+                    <!-- Character cards will be loaded here -->
+                </div>
             </div>
-        </div>
-        
-        <!-- Aba de Anotações -->
-        <div id="notes" class="tab-content">
-            <h2>Anotações da Sessão</h2>
-            <div class="notes-section">
-                <textarea id="session-notes" placeholder="Anote aqui informações importantes da sessão, como tesouros encontrados, NPCs conhecidos, objetivos da missão..."></textarea>
-                <button id="save-notes" style="margin-top: 0.5rem;">Salvar Anotações</button>
+            
+            <!-- Dice -->
+            <div id="dice" class="tab-content fade-in">
+                <div class="header">
+                    <h2>Mesa de Dados Virtual</h2>
+                    <button class="btn btn-gold" id="clear-history">
+                        <i class="fas fa-broom"></i>
+                        Limpar Histórico
+                    </button>
+                </div>
+                <div class="dice-section">
+                    <div class="dice-container">
+                        <div class="dice" data-sides="4">d4</div>
+                        <div class="dice" data-sides="6">d6</div>
+                        <div class="dice" data-sides="8">d8</div>
+                        <div class="dice" data-sides="10">d10</div>
+                        <div class="dice" data-sides="12">d12</div>
+                        <div class="dice" data-sides="20">d20</div>
+                        <div class="dice" data-sides="100">d100</div>
+                    </div>
+                    <div class="dice-result" id="dice-result"></div>
+                    
+                    <div class="custom-roll">
+                        <input type="number" id="custom-dice-count" min="1" max="10" value="1">
+                        <span>d</span>
+                        <input type="number" id="custom-dice-sides" min="2" max="100" value="6">
+                        <button class="btn" id="custom-roll">Rolar Dados</button>
+                        <button class="btn btn-secondary" id="advantage-roll">Vantagem</button>
+                        <button class="btn btn-secondary" id="disadvantage-roll">Desvantagem</button>
+                    </div>
+                    
+                    <div class="roll-history">
+                        <h4>Histórico de Rolagens:</h4>
+                        <div id="roll-history-list">
+                            <!-- Roll history will be displayed here -->
+                        </div>
+                    </div>
+                </div>
             </div>
+            
+            <!-- Initiative -->
+            <div id="initiative" class="tab-content fade-in">
+                <div class="header">
+                    <h2>Controle de Iniciativa</h2>
+                    <div class="user-actions">
+                        <button class="btn" id="add-to-initiative">
+                            <i class="fas fa-plus"></i>
+                            Adicionar
+                        </button>
+                        <button class="btn btn-secondary" id="next-turn">
+                            <i class="fas fa-forward"></i>
+                            Próximo Turno
+                        </button>
+                        <button class="btn btn-gold" id="start-combat">
+                            <i class="fas fa-fist-raised"></i>
+                            Iniciar Combate
+                        </button>
+                        <button class="btn btn-secondary" id="reset-initiative">
+                            <i class="fas fa-redo"></i>
+                            Reiniciar
+                        </button>
+                    </div>
+                </div>
+                <div class="initiative-tracker">
+                    <div class="combat-info">
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-value" id="combat-round">1</span>
+                                <span class="stat-label">Rodada</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="combat-turn">1</span>
+                                <span class="stat-label">Turno</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="combat-time">00:00</span>
+                                <span class="stat-label">Tempo</span>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="initiative-list" id="initiative-list">
+                        <!-- Initiative items will be loaded here -->
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Bestiary -->
+            <div id="bestiary" class="tab-content fade-in">
+                <div class="header">
+                    <h2>Bestiário</h2>
+                    <div class="user-actions">
+                        <button class="btn" id="add-monster">
+                            <i class="fas fa-plus"></i>
+                            Adicionar Monstro
+                        </button>
+                        <button class="btn btn-secondary" id="filter-monsters">
+                            <i class="fas fa-filter"></i>
+                            Filtrar
+                        </button>
+                    </div>
+                </div>
+                <div class="character-grid" id="bestiary-list">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Bestiário Vazio</h3>
+                            <div class="card-icon">
+                                <i class="fas fa-dragon"></i>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <p>Adicione monstros ao seu bestiário para acessá-los rapidamente durante as sessões.</p>
+                            <button class="btn" style="margin-top: 1rem;" id="add-sample-monsters">
+                                <i class="fas fa-magic"></i>
+                                Adicionar Monstros de Exemplo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Spells -->
+            <div id="spells" class="tab-content fade-in">
+                <div class="header">
+                    <h2>Grimório de Magias</h2>
+                    <div class="user-actions">
+                        <button class="btn" id="add-spell">
+                            <i class="fas fa-plus"></i>
+                            Adicionar Magia
+                        </button>
+                        <button class="btn btn-secondary" id="filter-spells">
+                            <i class="fas fa-filter"></i>
+                            Filtrar
+                        </button>
+                    </div>
+                </div>
+                <div class="character-grid" id="spells-list">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Grimório Vazio</h3>
+                            <div class="card-icon">
+                                <i class="fas fa-magic"></i>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <p>Adicione magias ao seu grimório para acessá-las rapidamente durante as sessões.</p>
+                            <button class="btn btn-magic" style="margin-top: 1rem;" id="add-sample-spells">
+                                <i class="fas fa-wand-magic-sparkles"></i>
+                                Adicionar Magias de Exemplo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Notes -->
+            <div id="notes" class="tab-content fade-in">
+                <div class="header">
+                    <h2>Anotações da Sessão</h2>
+                    <div class="user-actions">
+                        <button class="btn" id="save-notes">
+                            <i class="fas fa-save"></i>
+                            Salvar Anotações
+                        </button>
+                        <button class="btn btn-secondary" id="export-notes">
+                            <i class="fas fa-download"></i>
+                            Exportar
+                        </button>
+                    </div>
+                </div>
+                <div class="notes-section">
+                    <textarea id="session-notes" placeholder="Anote aqui informações importantes da sessão, como tesouros encontrados, NPCs conhecidos, objetivos da missão, eventos importantes..."></textarea>
+                </div>
+            </div>
+            
+            <!-- Maps -->
+            <div id="maps" class="tab-content fade-in">
+                <div class="header">
+                    <h2>Mapas da Campanha</h2>
+                </div>
+                <div class="dashboard">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Mapas Interativos</h3>
+                            <div class="card-icon">
+                                <i class="fas fa-map"></i>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <p>Em breve: Sistema completo de mapas interativos para suas campanhas!</p>
+                            <ul style="margin-top: 1rem; padding-left: 1.5rem;">
+                                <li>Upload de mapas personalizados</li>
+                                <li>Marcadores interativos</li>
+                                <li>Revelação progressiva de áreas</li>
+                                <li>Compartilhamento em tempo real</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Settings -->
+            <div id="settings" class="tab-content fade-in">
+                <div class="header">
+                    <h2>Configurações</h2>
+                </div>
+                <div class="dashboard">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Preferências</h3>
+                            <div class="card-icon">
+                                <i class="fas fa-cog"></i>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="form-group">
+                                <label for="theme-select">Tema:</label>
+                                <select id="theme-select">
+                                    <option value="dark">Escuro (Padrão)</option>
+                                    <option value="light">Claro</option>
+                                    <option value="sepia">Sépia</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="sound-toggle">Efeitos sonoros:</label>
+                                <select id="sound-toggle">
+                                    <option value="on">Ativado</option>
+                                    <option value="off">Desativado</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="auto-save">Salvamento automático:</label>
+                                <select id="auto-save">
+                                    <option value="on">Ativado</option>
+                                    <option value="off">Desativado</option>
+                                </select>
+                            </div>
+                            <button class="btn" style="margin-top: 1rem; width: 100%;">
+                                <i class="fas fa-save"></i>
+                                Salvar Configurações
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Dados da Aplicação</h3>
+                            <div class="card-icon">
+                                <i class="fas fa-database"></i>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <p>Gerencie os dados da sua aplicação.</p>
+                            <div class="character-actions" style="margin-top: 1rem;">
+                                <button class="action-btn" id="export-all-data">
+                                    <i class="fas fa-file-export"></i>
+                                    Exportar Tudo
+                                </button>
+                                <button class="action-btn" id="import-all-data">
+                                    <i class="fas fa-file-import"></i>
+                                    Importar
+                                </button>
+                                <button class="action-btn" id="reset-all-data">
+                                    <i class="fas fa-trash"></i>
+                                    Limpar Tudo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <footer>
+                <p>RPG Master Ultra &copy; 2023 - Sistema Definitivo de Gerenciamento de RPG | <span id="current-url">URL: https://liyacaellum-cloud.github.io/rpghelp/</span></p>
+            </footer>
         </div>
     </div>
     
-    <!-- Modal para adicionar/editar personagem -->
+    <!-- Modals -->
     <div id="character-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="modal-title">Adicionar Personagem</h3>
+                <h3 class="modal-title">Adicionar Personagem</h3>
                 <button class="close-modal">&times;</button>
             </div>
             <form id="character-form">
                 <input type="hidden" id="character-id">
-                <div class="form-group">
-                    <label for="character-name">Nome</label>
-                    <input type="text" id="character-name" required>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="character-name">Nome</label>
+                        <input type="text" id="character-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="character-class">Classe</label>
+                        <input type="text" id="character-class">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="character-race">Raça</label>
+                        <input type="text" id="character-race">
+                    </div>
+                    <div class="form-group">
+                        <label for="character-level">Nível</label>
+                        <input type="number" id="character-level" min="1" max="20" value="1">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="character-hp">Pontos de Vida</label>
+                        <input type="number" id="character-hp" min="0" value="10">
+                    </div>
+                    <div class="form-group">
+                        <label for="character-max-hp">Pontos de Vida Máximos</label>
+                        <input type="number" id="character-max-hp" min="1" value="10">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="character-ac">Classe de Armadura</label>
+                        <input type="number" id="character-ac" min="0" value="10">
+                    </div>
+                    <div class="form-group">
+                        <label for="character-speed">Deslocamento</label>
+                        <input type="number" id="character-speed" min="0" value="30">
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label for="character-class">Classe</label>
-                    <input type="text" id="character-class">
+                    <label for="character-description">Descrição</label>
+                    <textarea id="character-description" rows="3"></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="character-level">Nível</label>
-                    <input type="number" id="character-level" min="1" max="20" value="1">
-                </div>
-                <div class="form-group">
-                    <label for="character-hp">Pontos de Vida</label>
-                    <input type="number" id="character-hp" min="0" value="10">
-                </div>
-                <div class="form-group">
-                    <label for="character-ac">Classe de Armadura</label>
-                    <input type="number" id="character-ac" min="0" value="10">
-                </div>
-                <div class="form-group">
-                    <button type="submit">Salvar Personagem</button>
+                    <button type="submit" class="btn" style="width: 100%;">Salvar Personagem</button>
                 </div>
             </form>
         </div>
     </div>
     
-    <!-- Modal para adicionar à iniciativa -->
     <div id="initiative-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Adicionar à Iniciativa</h3>
+                <h3 class="modal-title">Adicionar à Iniciativa</h3>
                 <button class="close-modal">&times;</button>
             </div>
             <div class="form-group">
@@ -412,39 +1843,70 @@
                 <input type="number" id="initiative-roll" min="1" max="50" required>
             </div>
             <div class="form-group">
-                <button id="add-initiative">Adicionar</button>
+                <button class="btn" id="add-initiative" style="width: 100%;">Adicionar à Iniciativa</button>
             </div>
         </div>
     </div>
-    
-    <footer>
-        <p>RPG Helper &copy; 2023 - Criado para melhorar suas sessões de RPG</p>
-    </footer>
 
     <script>
         // Dados da aplicação
         let characters = JSON.parse(localStorage.getItem('rpgCharacters')) || [];
         let notes = localStorage.getItem('rpgNotes') || '';
         let initiativeList = JSON.parse(localStorage.getItem('rpgInitiative')) || [];
-        let currentTurn = 0;
+        let currentTurn = parseInt(localStorage.getItem('rpgCurrentTurn')) || 0;
+        let currentRound = parseInt(localStorage.getItem('rpgCurrentRound')) || 1;
+        let rollHistory = JSON.parse(localStorage.getItem('rpgRollHistory')) || [];
+        let combatStartTime = localStorage.getItem('rpgCombatStartTime') || null;
+        let totalRolls = parseInt(localStorage.getItem('rpgTotalRolls')) || 0;
+        let appSettings = JSON.parse(localStorage.getItem('rpgSettings')) || {
+            theme: 'dark',
+            sound: 'on',
+            autoSave: 'on'
+        };
         
         // Elementos DOM
         const tabContents = document.querySelectorAll('.tab-content');
-        const navButtons = document.querySelectorAll('.nav-btn');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pageTitle = document.getElementById('page-title');
         const characterList = document.getElementById('character-list');
+        const dashboardCharacters = document.getElementById('dashboard-characters');
         const characterModal = document.getElementById('character-modal');
         const initiativeModal = document.getElementById('initiative-modal');
         const characterForm = document.getElementById('character-form');
         const diceElements = document.querySelectorAll('.dice');
         const diceResult = document.getElementById('dice-result');
         const customRollBtn = document.getElementById('custom-roll');
+        const advantageRollBtn = document.getElementById('advantage-roll');
+        const disadvantageRollBtn = document.getElementById('disadvantage-roll');
         const sessionNotes = document.getElementById('session-notes');
         const saveNotesBtn = document.getElementById('save-notes');
         const initiativeListEl = document.getElementById('initiative-list');
         const addToInitiativeBtn = document.getElementById('add-to-initiative');
         const nextTurnBtn = document.getElementById('next-turn');
+        const startCombatBtn = document.getElementById('start-combat');
         const resetInitiativeBtn = document.getElementById('reset-initiative');
-        const addInitiativeBtn = document.getElementById('add-initiative');
+        const quickRollBtn = document.getElementById('quick-roll');
+        const saveDataBtn = document.getElementById('save-data');
+        const exportDataBtn = document.getElementById('export-data');
+        const clearHistoryBtn = document.getElementById('clear-history');
+        const activeCharactersEl = document.getElementById('total-chars');
+        const activeInitEl = document.getElementById('active-init');
+        const nextInitiativeEl = document.getElementById('next-initiative');
+        const currentTurnEl = document.getElementById('current-turn');
+        const roundCountEl = document.getElementById('round-count');
+        const combatRoundEl = document.getElementById('combat-round');
+        const combatTurnEl = document.getElementById('combat-turn');
+        const combatTimeEl = document.getElementById('combat-time');
+        const totalRollsEl = document.getElementById('total-rolls');
+        const sessionTimeEl = document.getElementById('session-time');
+        const goToInitiativeBtn = document.getElementById('go-to-initiative');
+        const addCharacterDashBtn = document.getElementById('add-character-dash');
+        const addCharacterBtn = document.getElementById('add-character');
+        const rollHistoryList = document.getElementById('roll-history-list');
+        const charCountBadge = document.getElementById('char-count');
+        const initCountBadge = document.getElementById('init-count');
+        const notification = document.getElementById('notification');
+        const notificationText = document.getElementById('notification-text');
         
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
@@ -452,26 +1914,42 @@
             loadCharacters();
             loadNotes();
             loadInitiative();
+            loadRollHistory();
+            updateDashboard();
+            updateCombatTimer();
+            loadSettings();
+            
+            // Iniciar partículas
+            initParticles();
             
             // Navegação entre abas
-            navButtons.forEach(button => {
-                button.addEventListener('click', function() {
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
                     const tabId = this.getAttribute('data-tab');
                     
-                    // Atualizar botões ativos
-                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    // Atualizar links ativos
+                    navLinks.forEach(nav => nav.classList.remove('active'));
                     this.classList.add('active');
                     
                     // Atualizar conteúdo visível
-                    tabContents.forEach(tab => tab.classList.remove('active'));
-                    document.getElementById(tabId).classList.add('active');
+                    tabContents.forEach(tab => {
+                        tab.classList.remove('active');
+                        tab.classList.remove('fade-in');
+                    });
+                    setTimeout(() => {
+                        document.getElementById(tabId).classList.add('active');
+                        document.getElementById(tabId).classList.add('fade-in');
+                    }, 50);
+                    
+                    // Atualizar título da página
+                    pageTitle.textContent = this.querySelector('span').textContent;
                 });
             });
             
-            // Botão para adicionar personagem
-            document.getElementById('add-character').addEventListener('click', function() {
-                openCharacterModal();
-            });
+            // Botões para adicionar personagem
+            addCharacterBtn.addEventListener('click', openCharacterModal);
+            addCharacterDashBtn.addEventListener('click', openCharacterModal);
             
             // Fechar modais
             document.querySelectorAll('.close-modal').forEach(button => {
@@ -496,9 +1974,131 @@
                 rollDice(count, sides);
             });
             
+            // Rolagem com vantagem
+            advantageRollBtn.addEventListener('click', function() {
+                const count = 2;
+                const sides = 20;
+                const rolls = [];
+                let total = 0;
+                
+                for (let i = 0; i < count; i++) {
+                    const roll = Math.floor(Math.random() * sides) + 1;
+                    rolls.push(roll);
+                }
+                
+                total = Math.max(...rolls);
+                
+                const resultText = `Vantagem: 2d20 (${rolls.join(', ')}) = ${total}`;
+                diceResult.textContent = resultText;
+                addToRollHistory(resultText);
+                totalRolls++;
+                updateDashboard();
+                saveRollHistory();
+                showNotification('Rolagem com vantagem realizada!');
+            });
+            
+            // Rolagem com desvantagem
+            disadvantageRollBtn.addEventListener('click', function() {
+                const count = 2;
+                const sides = 20;
+                const rolls = [];
+                let total = 0;
+                
+                for (let i = 0; i < count; i++) {
+                    const roll = Math.floor(Math.random() * sides) + 1;
+                    rolls.push(roll);
+                }
+                
+                total = Math.min(...rolls);
+                
+                const resultText = `Desvantagem: 2d20 (${rolls.join(', ')}) = ${total}`;
+                diceResult.textContent = resultText;
+                addToRollHistory(resultText);
+                totalRolls++;
+                updateDashboard();
+                saveRollHistory();
+                showNotification('Rolagem com desvantagem realizada!');
+            });
+            
+            // Rolagem rápida
+            quickRollBtn.addEventListener('click', function() {
+                rollDice(1, 20);
+            });
+            
+            // Rolagem rápida do dashboard
+            document.querySelectorAll('[data-quick-roll]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const roll = this.getAttribute('data-quick-roll');
+                    if (roll === 'd20') rollDice(1, 20);
+                    else if (roll === 'd6') rollDice(1, 6);
+                    else if (roll === '2d6') rollDice(2, 6);
+                    else if (roll === 'd100') rollDice(1, 100);
+                    else if (roll === '4d6k3') {
+                        // 4d6 keep highest 3
+                        const rolls = [];
+                        for (let i = 0; i < 4; i++) {
+                            rolls.push(Math.floor(Math.random() * 6) + 1);
+                        }
+                        rolls.sort((a, b) => b - a);
+                        const total = rolls[0] + rolls[1] + rolls[2];
+                        const resultText = `4d6k3: [${rolls.join(', ')}] = ${total}`;
+                        diceResult.textContent = resultText;
+                        addToRollHistory(resultText);
+                        totalRolls++;
+                        updateDashboard();
+                        saveRollHistory();
+                        showNotification('Rolagem 4d6 (maiores 3) realizada!');
+                    }
+                });
+            });
+            
             // Salvar anotações
-            saveNotesBtn.addEventListener('click', function() {
+            saveNotesBtn.addEventListener('click', saveNotes);
+            
+            // Salvar dados
+            saveDataBtn.addEventListener('click', function() {
+                saveCharacters();
                 saveNotes();
+                saveInitiative();
+                saveRollHistory();
+                saveSettings();
+                
+                // Feedback visual
+                showNotification('Todos os dados foram salvos com sucesso!');
+            });
+            
+            // Exportar dados
+            exportDataBtn.addEventListener('click', function() {
+                const data = {
+                    characters: characters,
+                    notes: notes,
+                    initiative: initiativeList,
+                    rollHistory: rollHistory,
+                    settings: appSettings
+                };
+                
+                const dataStr = JSON.stringify(data, null, 2);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                
+                const url = URL.createObjectURL(dataBlob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'rpg-master-ultra-backup.json';
+                link.click();
+                
+                URL.revokeObjectURL(url);
+                
+                showNotification('Dados exportados com sucesso!');
+            });
+            
+            // Limpar histórico
+            clearHistoryBtn.addEventListener('click', function() {
+                if (confirm('Tem certeza que deseja limpar o histórico de rolagens?')) {
+                    rollHistory = [];
+                    saveRollHistory();
+                    loadRollHistory();
+                    showNotification('Histórico de rolagens limpo!');
+                }
             });
             
             // Controle de iniciativa
@@ -506,16 +2106,28 @@
                 initiativeModal.style.display = 'flex';
             });
             
-            addInitiativeBtn.addEventListener('click', function() {
-                addToInitiative();
-            });
+            addInitiativeBtn.addEventListener('click', addToInitiative);
             
-            nextTurnBtn.addEventListener('click', function() {
-                nextTurn();
-            });
+            nextTurnBtn.addEventListener('click', nextTurn);
             
-            resetInitiativeBtn.addEventListener('click', function() {
-                resetInitiative();
+            startCombatBtn.addEventListener('click', startCombat);
+            
+            resetInitiativeBtn.addEventListener('click', resetInitiative);
+            
+            goToInitiativeBtn.addEventListener('click', function() {
+                navLinks.forEach(nav => nav.classList.remove('active'));
+                document.querySelector('[data-tab="initiative"]').classList.add('active');
+                
+                tabContents.forEach(tab => {
+                    tab.classList.remove('active');
+                    tab.classList.remove('fade-in');
+                });
+                setTimeout(() => {
+                    document.getElementById('initiative').classList.add('active');
+                    document.getElementById('initiative').classList.add('fade-in');
+                }, 50);
+                
+                pageTitle.textContent = 'Iniciativa';
             });
             
             // Fechar modal ao clicar fora
@@ -527,64 +2139,169 @@
                     initiativeModal.style.display = 'none';
                 }
             });
+            
+            // Atualizar temporizador de combate a cada segundo
+            setInterval(updateCombatTimer, 1000);
+            
+            // Configuração de salvamento automático
+            if (appSettings.autoSave === 'on') {
+                setInterval(function() {
+                    saveCharacters();
+                    saveNotes();
+                    saveInitiative();
+                    saveRollHistory();
+                    console.log('Salvamento automático realizado');
+                }, 30000); // Salva a cada 30 segundos
+            }
         });
         
         // Funções para personagens
         function loadCharacters() {
             characterList.innerHTML = '';
+            dashboardCharacters.innerHTML = '';
             
             if (characters.length === 0) {
-                characterList.innerHTML = '<p>Nenhum personagem cadastrado. Clique em "Adicionar Personagem" para começar.</p>';
+                characterList.innerHTML = `
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Nenhum Personagem</h3>
+                            <div class="card-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <p>Nenhum personagem cadastrado. Clique em "Novo Personagem" para começar.</p>
+                            <button class="btn" style="margin-top: 1rem;" onclick="openCharacterModal()">
+                                <i class="fas fa-plus"></i>
+                                Criar Primeiro Personagem
+                            </button>
+                        </div>
+                    </div>
+                `;
+                dashboardCharacters.innerHTML = `
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Nenhum Personagem</h3>
+                            <div class="card-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <p>Nenhum personagem cadastrado. Clique em "Novo Personagem" para começar.</p>
+                        </div>
+                    </div>
+                `;
+                
+                charCountBadge.textContent = '0';
                 return;
             }
             
             characters.forEach((character, index) => {
-                const characterCard = document.createElement('div');
-                characterCard.className = 'character-card';
-                characterCard.innerHTML = `
-                    <h3>${character.name}</h3>
-                    <p><strong>Classe:</strong> ${character.class || 'Não definida'}</p>
-                    <p><strong>Nível:</strong> ${character.level}</p>
-                    <div class="character-stats">
-                        <div class="stat">
-                            <span>PV:</span>
-                            <span>${character.hp}</span>
+                const hpPercent = (character.hp / character.maxHp) * 100;
+                const manaPercent = 80; // Exemplo fixo para demonstração
+                const staminaPercent = 60; // Exemplo fixo para demonstração
+                
+                const characterCard = `
+                    <div class="character-card">
+                        <div class="character-header">
+                            <div>
+                                <div class="character-name">${character.name}</div>
+                                <div class="character-class">${character.race || ''} ${character.class || ''}</div>
+                            </div>
+                            <div class="character-level">Nv. ${character.level}</div>
                         </div>
-                        <div class="stat">
-                            <span>CA:</span>
-                            <span>${character.ac}</span>
+                        <div class="character-body">
+                            <div class="character-stats">
+                                <div class="stat">
+                                    <span>PV:</span>
+                                    <span class="stat-value">${character.hp}/${character.maxHp}</span>
+                                </div>
+                                <div class="stat">
+                                    <span>CA:</span>
+                                    <span class="stat-value">${character.ac}</span>
+                                </div>
+                                <div class="stat">
+                                    <span>Desl:</span>
+                                    <span class="stat-value">${character.speed || '30'}ft</span>
+                                </div>
+                            </div>
+                            <div class="resource-bars">
+                                <div class="resource-bar">
+                                    <div class="resource-label">
+                                        <span>Pontos de Vida</span>
+                                        <span>${character.hp}/${character.maxHp}</span>
+                                    </div>
+                                    <div class="bar-container">
+                                        <div class="bar-fill health-bar" style="width: ${hpPercent}%"></div>
+                                    </div>
+                                </div>
+                                <div class="resource-bar">
+                                    <div class="resource-label">
+                                        <span>Pontos de Magia</span>
+                                        <span>32/40</span>
+                                    </div>
+                                    <div class="bar-container">
+                                        <div class="bar-fill mana-bar" style="width: ${manaPercent}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="character-actions">
+                                <button class="action-btn" onclick="editCharacter(${index})">
+                                    <i class="fas fa-edit"></i> Editar
+                                </button>
+                                <button class="action-btn" onclick="rollCharacterInit(${index})">
+                                    <i class="fas fa-dice"></i> Iniciativa
+                                </button>
+                                <button class="action-btn" onclick="deleteCharacter(${index})">
+                                    <i class="fas fa-trash"></i> Excluir
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    <div style="margin-top: 1rem;">
-                        <button onclick="editCharacter(${index})">Editar</button>
-                        <button onclick="deleteCharacter(${index})" style="background-color: #d9534f;">Excluir</button>
                     </div>
                 `;
-                characterList.appendChild(characterCard);
+                
+                characterList.innerHTML += characterCard;
+                
+                // No dashboard, mostrar apenas os primeiros 3 personagens
+                if (index < 3) {
+                    dashboardCharacters.innerHTML += characterCard;
+                }
             });
+            
+            charCountBadge.textContent = characters.length;
         }
         
         function openCharacterModal(character = null) {
-            const modalTitle = document.getElementById('modal-title');
+            const modalTitle = document.querySelector('#character-modal .modal-title');
             const characterId = document.getElementById('character-id');
             const characterName = document.getElementById('character-name');
             const characterClass = document.getElementById('character-class');
+            const characterRace = document.getElementById('character-race');
             const characterLevel = document.getElementById('character-level');
             const characterHp = document.getElementById('character-hp');
+            const characterMaxHp = document.getElementById('character-max-hp');
             const characterAc = document.getElementById('character-ac');
+            const characterSpeed = document.getElementById('character-speed');
+            const characterDescription = document.getElementById('character-description');
             
             if (character) {
                 modalTitle.textContent = 'Editar Personagem';
                 characterId.value = character.index;
                 characterName.value = character.name;
                 characterClass.value = character.class;
+                characterRace.value = character.race;
                 characterLevel.value = character.level;
                 characterHp.value = character.hp;
+                characterMaxHp.value = character.maxHp;
                 characterAc.value = character.ac;
+                characterSpeed.value = character.speed || '30';
+                characterDescription.value = character.description || '';
             } else {
                 modalTitle.textContent = 'Adicionar Personagem';
                 characterForm.reset();
                 characterId.value = '';
+                characterMaxHp.value = '10';
+                characterSpeed.value = '30';
             }
             
             characterModal.style.display = 'flex';
@@ -597,21 +2314,28 @@
             const characterData = {
                 name: document.getElementById('character-name').value,
                 class: document.getElementById('character-class').value,
+                race: document.getElementById('character-race').value,
                 level: parseInt(document.getElementById('character-level').value),
                 hp: parseInt(document.getElementById('character-hp').value),
-                ac: parseInt(document.getElementById('character-ac').value)
+                maxHp: parseInt(document.getElementById('character-max-hp').value),
+                ac: parseInt(document.getElementById('character-ac').value),
+                speed: parseInt(document.getElementById('character-speed').value),
+                description: document.getElementById('character-description').value
             };
             
             if (characterId) {
                 // Editar personagem existente
                 characters[characterId] = characterData;
+                showNotification('Personagem atualizado com sucesso!');
             } else {
                 // Adicionar novo personagem
                 characters.push(characterData);
+                showNotification('Personagem criado com sucesso!');
             }
             
             saveCharacters();
             loadCharacters();
+            updateDashboard();
             characterModal.style.display = 'none';
         });
         
@@ -626,7 +2350,35 @@
                 characters.splice(index, 1);
                 saveCharacters();
                 loadCharacters();
+                updateDashboard();
+                showNotification('Personagem excluído com sucesso!');
             }
+        }
+        
+        function rollCharacterInit(index) {
+            const character = characters[index];
+            const initiativeRoll = Math.floor(Math.random() * 20) + 1;
+            
+            initiativeList.push({ 
+                name: character.name, 
+                initiative: initiativeRoll,
+                isPlayer: true
+            });
+            
+            saveInitiative();
+            loadInitiative();
+            updateDashboard();
+            
+            // Mostrar resultado
+            diceResult.textContent = `${character.name} rolou ${initiativeRoll} para iniciativa!`;
+            diceResult.style.opacity = '0';
+            setTimeout(() => {
+                diceResult.style.opacity = '1';
+            }, 300);
+            
+            // Adicionar ao histórico
+            addToRollHistory(`${character.name}: iniciativa = ${initiativeRoll}`);
+            showNotification(`${character.name} rolou ${initiativeRoll} para iniciativa!`);
         }
         
         function saveCharacters() {
@@ -635,30 +2387,91 @@
         
         // Funções para dados
         function rollDice(count, sides) {
-            let results = [];
-            let total = 0;
+            // Efeito visual de rolagem
+            diceResult.textContent = "Rolando...";
+            diceResult.style.opacity = '0.5';
             
-            for (let i = 0; i < count; i++) {
-                const roll = Math.floor(Math.random() * sides) + 1;
-                results.push(roll);
-                total += roll;
-            }
+            // Adicionar classe de animação aos dados
+            diceElements.forEach(dice => {
+                if (parseInt(dice.getAttribute('data-sides')) === sides || count > 1) {
+                    dice.classList.add('dice-rolling');
+                }
+            });
             
-            let resultText = `Rolagem: ${count}d${sides} = `;
-            
-            if (count > 1) {
-                resultText += `${results.join(' + ')} = ${total}`;
-            } else {
-                resultText += total;
-            }
-            
-            diceResult.textContent = resultText;
-            
-            // Efeito visual
-            diceResult.style.opacity = '0';
             setTimeout(() => {
+                let results = [];
+                let total = 0;
+                
+                for (let i = 0; i < count; i++) {
+                    const roll = Math.floor(Math.random() * sides) + 1;
+                    results.push(roll);
+                    total += roll;
+                }
+                
+                let resultText = `Rolagem: ${count}d${sides} = `;
+                
+                if (count > 1) {
+                    resultText += `${results.join(' + ')} = ${total}`;
+                } else {
+                    resultText += total;
+                }
+                
+                diceResult.textContent = resultText;
                 diceResult.style.opacity = '1';
-            }, 300);
+                
+                // Remover classe de animação
+                diceElements.forEach(dice => {
+                    dice.classList.remove('dice-rolling');
+                });
+                
+                // Adicionar ao histórico
+                addToRollHistory(resultText);
+                totalRolls++;
+                updateDashboard();
+                saveRollHistory();
+                showNotification(`Rolagem de ${count}d${sides} realizada!`);
+            }, 500);
+        }
+        
+        function addToRollHistory(rollText) {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            
+            rollHistory.unshift({
+                text: rollText,
+                time: timeString
+            });
+            
+            // Manter apenas os últimos 50 registros
+            if (rollHistory.length > 50) {
+                rollHistory = rollHistory.slice(0, 50);
+            }
+            
+            loadRollHistory();
+        }
+        
+        function loadRollHistory() {
+            rollHistoryList.innerHTML = '';
+            
+            if (rollHistory.length === 0) {
+                rollHistoryList.innerHTML = '<div class="roll-history-item">Nenhuma rolagem registrada ainda.</div>';
+                return;
+            }
+            
+            rollHistory.forEach(roll => {
+                const rollItem = document.createElement('div');
+                rollItem.className = 'roll-history-item';
+                rollItem.innerHTML = `
+                    <span>${roll.text}</span>
+                    <span class="roll-time">${roll.time}</span>
+                `;
+                rollHistoryList.appendChild(rollItem);
+            });
+        }
+        
+        function saveRollHistory() {
+            localStorage.setItem('rpgRollHistory', JSON.stringify(rollHistory));
+            localStorage.setItem('rpgTotalRolls', totalRolls.toString());
         }
         
         // Funções para anotações
@@ -669,7 +2482,7 @@
         function saveNotes() {
             notes = sessionNotes.value;
             localStorage.setItem('rpgNotes', notes);
-            alert('Anotações salvas com sucesso!');
+            showNotification('Anotações salvas com sucesso!');
         }
         
         // Funções para iniciativa
@@ -677,7 +2490,8 @@
             initiativeListEl.innerHTML = '';
             
             if (initiativeList.length === 0) {
-                initiativeListEl.innerHTML = '<p>Nenhum participante na iniciativa. Clique em "Adicionar à Iniciativa" para começar.</p>';
+                initiativeListEl.innerHTML = '<div class="dashboard-card"><p>Nenhum participante na iniciativa. Clique em "Adicionar" para começar.</p></div>';
+                initCountBadge.textContent = '0';
                 return;
             }
             
@@ -691,11 +2505,13 @@
                     listItem.classList.add('current-turn');
                 }
                 listItem.innerHTML = `
-                    <span>${item.name}</span>
-                    <span>Iniciativa: ${item.initiative}</span>
+                    <span class="initiative-name">${item.name}</span>
+                    <span class="initiative-value">${item.initiative}</span>
                 `;
                 initiativeListEl.appendChild(listItem);
             });
+            
+            initCountBadge.textContent = initiativeList.length;
         }
         
         function addToInitiative() {
@@ -703,40 +2519,213 @@
             const initiative = parseInt(document.getElementById('initiative-roll').value);
             
             if (!name || isNaN(initiative)) {
-                alert('Preencha todos os campos corretamente.');
+                showNotification('Preencha todos os campos corretamente.', 'error');
                 return;
             }
             
             initiativeList.push({ name, initiative });
             saveInitiative();
             loadInitiative();
+            updateDashboard();
             initiativeModal.style.display = 'none';
             
             // Limpar campos
             document.getElementById('initiative-name').value = '';
             document.getElementById('initiative-roll').value = '';
+            
+            showNotification(`${name} adicionado à iniciativa com valor ${initiative}!`);
         }
         
         function nextTurn() {
-            if (initiativeList.length === 0) return;
+            if (initiativeList.length === 0) {
+                showNotification('Não há participantes na iniciativa.', 'warning');
+                return;
+            }
             
             currentTurn = (currentTurn + 1) % initiativeList.length;
+            
+            // Se voltou ao primeiro, incrementa a rodada
+            if (currentTurn === 0) {
+                currentRound++;
+                combatRoundEl.textContent = currentRound;
+                localStorage.setItem('rpgCurrentRound', currentRound.toString());
+            }
+            
+            combatTurnEl.textContent = currentTurn + 1;
+            
             saveInitiative();
             loadInitiative();
+            updateDashboard();
+            
+            showNotification(`Turno de ${initiativeList[currentTurn].name}!`);
+        }
+        
+        function startCombat() {
+            if (initiativeList.length === 0) {
+                showNotification('Adicione participantes à iniciativa antes de iniciar o combate.', 'error');
+                return;
+            }
+            
+            currentTurn = 0;
+            currentRound = 1;
+            combatStartTime = new Date().toISOString();
+            
+            combatRoundEl.textContent = currentRound;
+            combatTurnEl.textContent = currentTurn + 1;
+            
+            localStorage.setItem('rpgCurrentTurn', currentTurn.toString());
+            localStorage.setItem('rpgCurrentRound', currentRound.toString());
+            localStorage.setItem('rpgCombatStartTime', combatStartTime);
+            
+            saveInitiative();
+            loadInitiative();
+            updateDashboard();
+            
+            showNotification('Combate iniciado! Boa sorte!', 'success');
         }
         
         function resetInitiative() {
             if (confirm('Tem certeza que deseja reiniciar a iniciativa?')) {
                 initiativeList = [];
                 currentTurn = 0;
+                currentRound = 1;
+                combatStartTime = null;
+                
+                combatRoundEl.textContent = currentRound;
+                combatTurnEl.textContent = currentTurn + 1;
+                combatTimeEl.textContent = '00:00';
+                
                 saveInitiative();
                 loadInitiative();
+                updateDashboard();
+                
+                localStorage.removeItem('rpgCombatStartTime');
+                
+                showNotification('Iniciativa reiniciada!');
             }
+        }
+        
+        function updateCombatTimer() {
+            if (!combatStartTime) return;
+            
+            const start = new Date(combatStartTime);
+            const now = new Date();
+            const diff = now - start;
+            
+            const minutes = Math.floor(diff / 60000);
+            const seconds = Math.floor((diff % 60000) / 1000);
+            
+            combatTimeEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         }
         
         function saveInitiative() {
             localStorage.setItem('rpgInitiative', JSON.stringify(initiativeList));
             localStorage.setItem('rpgCurrentTurn', currentTurn.toString());
+        }
+        
+        // Funções para dashboard
+        function updateDashboard() {
+            // Atualizar contador de personagens
+            activeCharactersEl.textContent = characters.length;
+            
+            // Atualizar contador em combate
+            activeInitEl.textContent = initiativeList.length;
+            
+            // Atualizar próximo na iniciativa
+            if (initiativeList.length > 0) {
+                const nextTurnIndex = (currentTurn + 1) % initiativeList.length;
+                nextInitiativeEl.textContent = `Próximo: ${initiativeList[nextTurnIndex].name}`;
+                currentTurnEl.textContent = initiativeList[currentTurn].name;
+            } else {
+                nextInitiativeEl.textContent = 'Nenhum combate ativo';
+                currentTurnEl.textContent = '-';
+            }
+            
+            // Atualizar rodada
+            roundCountEl.textContent = currentRound;
+            
+            // Atualizar total de rolagens
+            totalRollsEl.textContent = totalRolls;
+            
+            // Calcular tempo estimado de sessão (exemplo)
+            const sessionHours = Math.floor(totalRolls / 10);
+            sessionTimeEl.textContent = `${sessionHours}h`;
+        }
+        
+        // Sistema de partículas para efeito visual
+        function initParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 40;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Posição aleatória
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                
+                // Tamanho aleatório
+                const size = Math.random() * 4 + 1;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Cor aleatória
+                const colors = [var(--gold), var(--accent), var(--magic), var(--bronze)];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.backgroundColor = color;
+                
+                // Opacidade aleatória
+                const opacity = Math.random() * 0.5 + 0.1;
+                particle.style.opacity = opacity;
+                
+                // Animação
+                const duration = Math.random() * 30 + 20;
+                const x = Math.random() * 2 - 1;
+                const y = Math.random() * 2 - 1;
+                particle.style.setProperty('--x', x);
+                particle.style.setProperty('--y', y);
+                particle.style.animation = `float ${duration}s linear infinite`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Sistema de notificações
+        function showNotification(message, type = 'success') {
+            notificationText.textContent = message;
+            notification.className = 'notification';
+            notification.classList.add(type);
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Configurações
+        function loadSettings() {
+            const themeSelect = document.getElementById('theme-select');
+            const soundToggle = document.getElementById('sound-toggle');
+            const autoSave = document.getElementById('auto-save');
+            
+            if (themeSelect) themeSelect.value = appSettings.theme;
+            if (soundToggle) soundToggle.value = appSettings.sound;
+            if (autoSave) autoSave.value = appSettings.autoSave;
+        }
+        
+        function saveSettings() {
+            const themeSelect = document.getElementById('theme-select');
+            const soundToggle = document.getElementById('sound-toggle');
+            const autoSave = document.getElementById('auto-save');
+            
+            if (themeSelect) appSettings.theme = themeSelect.value;
+            if (soundToggle) appSettings.sound = soundToggle.value;
+            if (autoSave) appSettings.autoSave = autoSave.value;
+            
+            localStorage.setItem('rpgSettings', JSON.stringify(appSettings));
         }
     </script>
 </body>
