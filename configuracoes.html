@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações - RPG Master Ultra</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=MedievalSharp&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notification-text">Operação realizada com sucesso!</span>
+    </div>
+    
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <h1>RPG Master Ultra</h1>
+                <p>Sistema Definitivo de Gerenciamento de RPG</p>
+            </div>
+            
+            <div class="campaign-selector">
+                <label for="campaign">Campanha Ativa:</label>
+                <select id="campaign">
+                    <option value="default">Aventura Principal</option>
+                    <option value="side">Missão Secundária</option>
+                    <option value="new">Nova Campanha</option>
+                </select>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="personagens.html" class="nav-link">
+                        <i class="fas fa-users"></i>
+                        <span>Personagens</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="dados.html" class="nav-link">
+                        <i class="fas fa-dice-d20"></i>
+                        <span>Mesa de Dados</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="iniciativa.html" class="nav-link">
+                        <i class="fas fa-list-ol"></i>
+                        <span>Iniciativa</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="bestiario.html" class="nav-link">
+                        <i class="fas fa-dragon"></i>
+                        <span>Bestiário</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="magias.html" class="nav-link">
+                        <i class="fas fa-magic"></i>
+                        <span>Grimório</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="anotacoes.html" class="nav-link">
+                        <i class="fas fa-scroll"></i>
+                        <span>Anotações</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="mapas.html" class="nav-link">
+                        <i class="fas fa-map"></i>
+                        <span>Mapas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="configuracoes.html" class="nav-link active">
+                        <i class="fas fa-cog"></i>
+                        <span>Configurações</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h2>Configurações</h2>
+            </div>
+            
+            <div class="dashboard">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Preferências</h3>
+                        <div class="card-icon">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="form-group">
+                            <label for="theme-select">Tema:</label>
+                            <select id="theme-select">
+                                <option value="dark">Escuro (Padrão)</option>
+                                <option value="light">Claro</option>
+                                <option value="sepia">Sépia</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sound-toggle">Efeitos sonoros:</label>
+                            <select id="sound-toggle">
+                                <option value="on">Ativado</option>
+                                <option value="off">Desativado</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="auto-save">Salvamento automático:</label>
+                            <select id="auto-save">
+                                <option value="on">Ativado</option>
+                                <option value="off">Desativado</option>
+                            </select>
+                        </div>
+                        <button class="btn" style="margin-top: 1rem; width: 100%;">
+                            <i class="fas fa-save"></i>
+                            Salvar Configurações
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Dados da Aplicação</h3>
+                        <div class="card-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <p>Gerencie os dados da sua aplicação.</p>
+                        <div class="character-actions" style="margin-top: 1rem;">
+                            <button class="action-btn" id="export-all-data">
+                                <i class="fas fa-file-export"></i>
+                                Exportar Tudo
+                            </button>
+                            <button class="action-btn" id="import-all-data">
+                                <i class="fas fa-file-import"></i>
+                                Importar
+                            </button>
+                            <button class="action-btn" id="reset-all-data">
+                                <i class="fas fa-trash"></i>
+                                Limpar Tudo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <footer>
+                <p>RPG Master Ultra &copy; 2023 - Sistema Definitivo de Gerenciamento de RPG</p>
+            </footer>
+        </div>
+    </div>
+
+    <script src="assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSettings();
+            setupSettingsEventListeners();
+        });
+
+        function setupSettingsEventListeners() {
+            // Exportar todos os dados
+            const exportAllBtn = document.getElementById('export-all-data');
+            if (exportAllBtn) {
+                exportAllBtn.addEventListener('click', exportAllData);
+            }
+
+            // Importar dados
+            const importAllBtn = document.getElementById('import-all-data');
+            if (importAllBtn) {
+                importAllBtn.addEventListener('click', importAllData);
+            }
+
+            // Resetar dados
+            const resetAllBtn = document.getElementById('reset-all-data');
+            if (resetAllBtn) {
+                resetAllBtn.addEventListener('click', resetAllData);
+            }
+        }
+
+        function loadSettings() {
+            const settings = JSON.parse(localStorage.getItem('rpgSettings')) || {
+                theme: 'dark',
+                sound: 'on',
+                autoSave: 'on'
+            };
+
+            document.getElementById('theme-select').value = settings.theme;
+            document.getElementById('sound-toggle').value = settings.sound;
+            document.getElementById('auto-save').value = settings.autoSave;
+        }
+
+        function exportAllData() {
+            const data = {
+                characters: JSON.parse(localStorage.getItem('rpgCharacters')) || [],
+                notes: localStorage.getItem('rpgNotes') || '',
+                initiative: JSON.parse(localStorage.getItem('rpgInitiative')) || [],
+                rollHistory: JSON.parse(localStorage.getItem('rpgRollHistory')) || [],
+                settings: JSON.parse(localStorage.getItem('rpgSettings')) || {}
+            };
+
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'rpg-master-ultra-complete-backup.json';
+            link.click();
+            
+            URL.revokeObjectURL(url);
+            showNotification('Todos os dados exportados com sucesso!');
+        }
+
+        function importAllData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = e => {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = event => {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        
+                        if (data.characters) localStorage.setItem('rpgCharacters', JSON.stringify(data.characters));
+                        if (data.notes) localStorage.setItem('rpgNotes', data.notes);
+                        if (data.initiative) localStorage.setItem('rpgInitiative', JSON.stringify(data.initiative));
+                        if (data.rollHistory) localStorage.setItem('rpgRollHistory', JSON.stringify(data.rollHistory));
+                        if (data.settings) localStorage.setItem('rpgSettings', JSON.stringify(data.settings));
+                        
+                        showNotification('Todos os dados importados com sucesso!');
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+                    } catch (e) {
+                        console.error('Erro ao importar dados:', e);
+                        showNotification('Arquivo inválido!', 'error');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        }
+
+        function resetAllData() {
+            if (confirm('Tem certeza que deseja limpar TODOS os dados? Esta ação não pode ser desfeita!')) {
+                localStorage.clear();
+                showNotification('Todos os dados foram limpos!');
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            }
+        }
+    </script>
+</body>
+</html>
