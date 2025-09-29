@@ -1,0 +1,188 @@
+// RPG MASTER ULTRA - FUNÇÕES GLOBAIS
+
+// Sistema de notificações
+function showNotification(message, type = 'success') {
+    const notification = document.getElementById('notification');
+    const notificationText = document.getElementById('notification-text');
+    
+    if (!notification || !notificationText) return;
+    
+    notificationText.textContent = message;
+    notification.className = 'notification';
+    notification.classList.add(type);
+    notification.classList.add('show');
+    
+    setTimeout(() => {
+        notification.classList.remove('show');
+    }, 3000);
+}
+
+// Sistema de partículas
+function initParticles() {
+    const particlesContainer = document.getElementById('particles');
+    if (!particlesContainer) return;
+    
+    const particleCount = 40;
+    
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        // Posição aleatória
+        const posX = Math.random() * 100;
+        const posY = Math.random() * 100;
+        particle.style.left = `${posX}%`;
+        particle.style.top = `${posY}%`;
+        
+        // Tamanho aleatório
+        const size = Math.random() * 4 + 1;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        // Cor aleatória
+        const colors = ['var(--gold)', 'var(--accent)', 'var(--magic)', 'var(--bronze)'];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        particle.style.backgroundColor = color;
+        
+        // Opacidade aleatória
+        const opacity = Math.random() * 0.5 + 0.1;
+        particle.style.opacity = opacity;
+        
+        // Animação
+        const duration = Math.random() * 30 + 20;
+        const x = Math.random() * 2 - 1;
+        const y = Math.random() * 2 - 1;
+        particle.style.setProperty('--x', x);
+        particle.style.setProperty('--y', y);
+        particle.style.animation = `float ${duration}s linear infinite`;
+        
+        particlesContainer.appendChild(particle);
+    }
+}
+
+// Gerenciamento de dados local
+function saveToLocalStorage(key, data) {
+    try {
+        localStorage.setItem(key, JSON.stringify(data));
+        return true;
+    } catch (e) {
+        console.error('Erro ao salvar no localStorage:', e);
+        showNotification('Erro ao salvar dados!', 'error');
+        return false;
+    }
+}
+
+function loadFromLocalStorage(key) {
+    try {
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : null;
+    } catch (e) {
+        console.error('Erro ao carregar do localStorage:', e);
+        return null;
+    }
+}
+
+// Exportar dados
+function exportData(data, filename = 'rpg-data.json') {
+    try {
+        const dataStr = JSON.stringify(data, null, 2);
+        const dataBlob = new Blob([dataStr], {type: 'application/json'});
+        
+        const url = URL.createObjectURL(dataBlob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        
+        return true;
+    } catch (e) {
+        console.error('Erro ao exportar dados:', e);
+        showNotification('Erro ao exportar dados!', 'error');
+        return false;
+    }
+}
+
+// Importar dados
+function importData(callback) {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    
+    input.onchange = e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = event => {
+            try {
+                const data = JSON.parse(event.target.result);
+                callback(data);
+            } catch (e) {
+                console.error('Erro ao importar dados:', e);
+                showNotification('Arquivo inválido!', 'error');
+            }
+        };
+        reader.readAsText(file);
+    };
+    
+    input.click();
+}
+
+// Utilitários de data/hora
+function getCurrentTime() {
+    const now = new Date();
+    return now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+}
+
+function formatDuration(minutes) {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return `${hours}h ${mins}m`;
+}
+
+// Inicialização geral
+document.addEventListener('DOMContentLoaded', function() {
+    initParticles();
+    
+    // Fechar modais ao clicar fora
+    document.addEventListener('click', function(event) {
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(modal => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    });
+    
+    // Fechar modais com ESC
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                modal.style.display = 'none';
+            });
+        }
+    });
+    
+    // Atualizar URL atual no footer (se existir)
+    const currentUrlElement = document.getElementById('current-url');
+    if (currentUrlElement) {
+        currentUrlElement.textContent = `URL: ${window.location.href}`;
+    }
+});
+
+// Validação de formulários
+function validateForm(formData) {
+    const errors = [];
+    
+    for (const [key, value] of Object.entries(formData)) {
+        if (!value && value !== 0) {
+            errors.push(`O campo ${key} é obrigatório`);
+        }
+    }
+    
+    return errors;
+}
