@@ -45,9 +45,45 @@ function setupEventListeners() {
     closeModalBtns.forEach(btn => {
         btn.addEventListener('click', function() {
             console.log('Fechando modal');
-            document.getElementById('character-modal').style.display = 'none';
+            closeCharacterModal();
         });
     });
+
+    // Fechar modal clicando fora
+    const modal = document.getElementById('character-modal');
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeCharacterModal();
+            }
+        });
+    }
+
+    // Event listeners para filtros
+    setupFilterListeners();
+}
+
+function setupFilterListeners() {
+    const searchInput = document.getElementById('search-characters');
+    const filterClass = document.getElementById('filter-class');
+    const filterLevel = document.getElementById('filter-level');
+
+    if (searchInput) {
+        searchInput.addEventListener('input', filterCharacters);
+    }
+    if (filterClass) {
+        filterClass.addEventListener('change', filterCharacters);
+    }
+    if (filterLevel) {
+        filterLevel.addEventListener('change', filterCharacters);
+    }
+}
+
+function closeCharacterModal() {
+    const modal = document.getElementById('character-modal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
 }
 
 function loadCharacters() {
@@ -113,13 +149,14 @@ function renderCharacters(filteredCharacters = null) {
         } else {
             characterList.innerHTML = charsToRender.map((character, index) => {
                 const hpPercent = (character.hp / character.maxHp) * 100;
+                const safeDescription = character.description ? character.description.replace(/`/g, '\\`') : '';
                 
                 return `
                     <div class="character-card">
                         <div class="character-header">
                             <div>
-                                <div class="character-name">${character.name}</div>
-                                <div class="character-class">${character.race || ''} ${character.class || ''}</div>
+                                <div class="character-name">${escapeHtml(character.name)}</div>
+                                <div class="character-class">${escapeHtml(character.race || '')} ${escapeHtml(character.class || '')}</div>
                             </div>
                             <div class="character-level">Nv. ${character.level}</div>
                         </div>
@@ -149,7 +186,7 @@ function renderCharacters(filteredCharacters = null) {
                                     </div>
                                 </div>
                             </div>
-                            ${character.description ? `<div style="margin: 1rem 0; padding: 0.8rem; background: rgba(0,0,0,0.3); border-radius: 6px; font-size: 0.9rem; border-left: 3px solid var(--bronze);">${character.description}</div>` : ''}
+                            ${character.description ? `<div class="character-description">${escapeHtml(character.description)}</div>` : ''}
                             <div class="character-actions">
                                 <button class="action-btn" onclick="editCharacter(${index})">
                                     <i class="fas fa-edit"></i> Editar
@@ -157,7 +194,7 @@ function renderCharacters(filteredCharacters = null) {
                                 <button class="action-btn" onclick="rollInitiativeForCharacter(${index})">
                                     <i class="fas fa-dice"></i> Iniciativa
                                 </button>
-                                <button class="action-btn" onclick="deleteCharacter(${index})">
+                                <button class="action-btn danger" onclick="deleteCharacter(${index})">
                                     <i class="fas fa-trash"></i> Excluir
                                 </button>
                             </div>
@@ -193,8 +230,8 @@ function renderCharacters(filteredCharacters = null) {
                     <div class="character-card">
                         <div class="character-header">
                             <div>
-                                <div class="character-name">${character.name}</div>
-                                <div class="character-class">${character.race || ''} ${character.class || ''}</div>
+                                <div class="character-name">${escapeHtml(character.name)}</div>
+                                <div class="character-class">${escapeHtml(character.race || '')} ${escapeHtml(character.class || '')}</div>
                             </div>
                             <div class="character-level">Nv. ${character.level}</div>
                         </div>
@@ -247,16 +284,21 @@ function openCharacterModal(character = null) {
     const modal = document.getElementById('character-modal');
     const title = document.getElementById('modal-character-title');
     
+    if (!modal || !title) {
+        console.error('Modal ou título não encontrado!');
+        return;
+    }
+    
     if (character) {
         title.textContent = 'Editar Personagem';
         document.getElementById('character-id').value = character.index;
-        document.getElementById('character-name').value = character.name;
+        document.getElementById('character-name').value = character.name || '';
         document.getElementById('character-class').value = character.class || '';
         document.getElementById('character-race').value = character.race || '';
-        document.getElementById('character-level').value = character.level;
-        document.getElementById('character-hp').value = character.hp;
-        document.getElementById('character-max-hp').value = character.maxHp;
-        document.getElementById('character-ac').value = character.ac;
+        document.getElementById('character-level').value = character.level || '1';
+        document.getElementById('character-hp').value = character.hp || '10';
+        document.getElementById('character-max-hp').value = character.maxHp || '10';
+        document.getElementById('character-ac').value = character.ac || '10';
         document.getElementById('character-speed').value = character.speed || '30';
         document.getElementById('character-description').value = character.description || '';
     } else {
@@ -298,29 +340,40 @@ function saveCharacter() {
     console.log('Dados do personagem:', characterData);
     
     // Validação básica
-    if (!characterData.name) {
+    if (!characterData.name.trim()) {
         showNotification('Nome é obrigatório!', 'error');
         return;
     }
     
+    if (characterData.hp > characterData.maxHp) {
+        showNotification('PV atual não pode ser maior que PV máximo!', 'error');
+        return;
+    }
+    
+    let success = false;
+    
     if (characterId) {
         // Editar personagem existente
-        const index = characters.findIndex(c => c.id === characterId);
-        if (index !== -1) {
+        const index = parseInt(characterId);
+        if (index >= 0 && index < characters.length) {
+            // Preservar a data de criação original
+            characterData.createdAt = characters[index].createdAt;
             characters[index] = characterData;
             console.log('Personagem editado:', characterData);
             showNotification('Personagem atualizado com sucesso!');
+            success = true;
         }
     } else {
         // Adicionar novo personagem
         characters.push(characterData);
         console.log('Novo personagem adicionado:', characterData);
         showNotification('Personagem criado com sucesso!');
+        success = true;
     }
     
-    if (saveCharacters()) {
+    if (success && saveCharacters()) {
         renderCharacters();
-        document.getElementById('character-modal').style.display = 'none';
+        closeCharacterModal();
     }
 }
 
@@ -378,7 +431,7 @@ function rollInitiativeForCharacter(index) {
     }
 }
 
-// Filtros (se existirem na página)
+// Filtros
 function filterCharacters() {
     const searchInput = document.getElementById('search-characters');
     const filterClass = document.getElementById('filter-class');
@@ -408,4 +461,127 @@ function filterCharacters() {
     });
     
     renderCharacters(filtered);
+}
+
+// Função de notificação
+function showNotification(message, type = 'success') {
+    // Verificar se já existe um container de notificações
+    let container = document.getElementById('notification-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'notification-container';
+        container.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        `;
+        document.body.appendChild(container);
+    }
+    
+    // Criar notificação
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+        background: ${type === 'error' ? '#d32f2f' : '#388e3c'};
+        color: white;
+        padding: 12px 20px;
+        border-radius: 4px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        font-weight: 500;
+        transition: all 0.3s ease;
+        transform: translateX(100%);
+        opacity: 0;
+    `;
+    notification.textContent = message;
+    
+    container.appendChild(notification);
+    
+    // Animação de entrada
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+        notification.style.opacity = '1';
+    }, 10);
+    
+    // Remover após 3 segundos
+    setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        notification.style.opacity = '0';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
+}
+
+// Função auxiliar para evitar XSS
+function escapeHtml(unsafe) {
+    if (typeof unsafe !== 'string') return unsafe;
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+// Resetar filtros
+function resetFilters() {
+    const searchInput = document.getElementById('search-characters');
+    const filterClass = document.getElementById('filter-class');
+    const filterLevel = document.getElementById('filter-level');
+    
+    if (searchInput) searchInput.value = '';
+    if (filterClass) filterClass.value = '';
+    if (filterLevel) filterLevel.value = '';
+    
+    renderCharacters();
+}
+
+// Exportar personagens
+function exportCharacters() {
+    const dataStr = JSON.stringify(characters, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'rpg-characters-backup.json';
+    link.click();
+    
+    URL.revokeObjectURL(url);
+    showNotification('Personagens exportados com sucesso!');
+}
+
+// Importar personagens
+function importCharacters(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const imported = JSON.parse(e.target.result);
+            if (Array.isArray(imported)) {
+                if (confirm(`Deseja importar ${imported.length} personagem(ns)? Isso substituirá seus personagens atuais.`)) {
+                    characters = imported;
+                    saveCharacters();
+                    renderCharacters();
+                    showNotification(`${imported.length} personagem(ns) importado(s) com sucesso!`);
+                }
+            } else {
+                showNotification('Arquivo inválido!', 'error');
+            }
+        } catch (error) {
+            showNotification('Erro ao importar arquivo!', 'error');
+            console.error('Erro na importação:', error);
+        }
+    };
+    reader.readAsText(file);
+    
+    // Resetar input
+    event.target.value = '';
 }
