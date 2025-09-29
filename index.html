@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -17,7 +18,6 @@
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: #ecf0f1;
             min-height: 100vh;
-            line-height: 1.6;
         }
 
         .container {
@@ -26,7 +26,6 @@
             padding: 20px;
         }
 
-        /* Header */
         .header {
             background: rgba(0, 0, 0, 0.3);
             padding: 1rem 2rem;
@@ -84,14 +83,13 @@
             font-weight: bold;
         }
 
-        /* Hero Section */
         .hero {
             text-align: center;
             padding: 4rem 2rem;
         }
 
         .hero h1 {
-            font-size: 3rem;
+            font-size: 2.5rem;
             margin-bottom: 1rem;
             color: #ffd700;
         }
@@ -102,7 +100,6 @@
             opacity: 0.9;
         }
 
-        /* Auth Section */
         #auth-section {
             max-width: 400px;
             margin: 0 auto;
@@ -124,16 +121,11 @@
             padding: 1rem;
             cursor: pointer;
             border-bottom: 3px solid transparent;
-            transition: all 0.3s ease;
         }
 
         .auth-tab.active {
             border-bottom-color: #cd7f32;
             color: #ffd700;
-        }
-
-        .auth-tab:hover {
-            background: rgba(255,255,255,0.1);
         }
 
         .form-group {
@@ -144,7 +136,6 @@
             display: block;
             margin-bottom: 0.5rem;
             color: #bdc3c7;
-            font-weight: 500;
         }
 
         .form-control {
@@ -155,13 +146,6 @@
             border-radius: 4px;
             color: #ecf0f1;
             font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: #cd7f32;
-            background: rgba(255,255,255,0.15);
         }
 
         .btn {
@@ -199,6 +183,7 @@
             gap: 1rem;
             justify-content: center;
             margin-top: 2rem;
+            flex-wrap: wrap;
         }
 
         .features {
@@ -214,12 +199,6 @@
             border-radius: 10px;
             text-align: center;
             border: 1px solid #34495e;
-            transition: all 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            border-color: #cd7f32;
         }
 
         .feature-icon {
@@ -228,7 +207,6 @@
             color: #ffd700;
         }
 
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -240,13 +218,14 @@
             z-index: 1000;
             align-items: center;
             justify-content: center;
+            padding: 20px;
         }
 
         .modal-content {
             background: #16213e;
             padding: 2rem;
             border-radius: 10px;
-            width: 90%;
+            width: 100%;
             max-width: 400px;
             border: 2px solid #cd7f32;
             max-height: 90vh;
@@ -273,13 +252,36 @@
             padding: 0.5rem;
         }
 
-        .debug-info {
-            background: rgba(0,0,0,0.3);
-            padding: 1rem;
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #27ae60;
+            color: white;
+            padding: 16px 24px;
             border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 10000;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .notification.error {
+            background: #e74c3c;
+        }
+
+        .debug-panel {
             margin-top: 1rem;
-            font-size: 0.9rem;
-            border-left: 3px solid #cd7f32;
+            padding: 1rem;
+            background: rgba(255,0,0,0.1);
+            border-radius: 8px;
+            border-left: 3px solid #e74c3c;
+        }
+
+        .debug-panel button {
+            width: 100%;
+            margin-bottom: 0.5rem;
+            font-size: 0.8rem;
         }
     </style>
 </head>
@@ -329,7 +331,6 @@
                 </button>
             </div>
 
-            <!-- Features Section -->
             <section class="features" id="features" style="display: none;">
                 <div class="feature-card">
                     <div class="feature-icon">👥</div>
@@ -370,22 +371,22 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Junte-se à Turma!</h2>
-                <button class="close-modal">&times;</button>
+                <button class="close-modal" onclick="closeAuthModal()">&times;</button>
             </div>
 
             <div class="auth-tabs">
-                <div class="auth-tab active" id="login-tab" onclick="auth.switchToLogin()">Entrar</div>
-                <div class="auth-tab" id="register-tab" onclick="auth.switchToRegister()">Registrar</div>
+                <div class="auth-tab active" id="login-tab" onclick="switchToLogin()">Entrar</div>
+                <div class="auth-tab" id="register-tab" onclick="switchToRegister()">Registrar</div>
             </div>
 
             <form id="login-form">
                 <div class="form-group">
                     <label for="login-username">Usuário</label>
-                    <input type="text" id="login-username" class="form-control" required placeholder="Digite seu usuário">
+                    <input type="text" id="login-username" class="form-control" required value="admin">
                 </div>
                 <div class="form-group">
                     <label for="login-password">Senha</label>
-                    <input type="password" id="login-password" class="form-control" required placeholder="Digite sua senha">
+                    <input type="password" id="login-password" class="form-control" required value="admin123">
                 </div>
                 <button type="submit" class="btn btn-primary" style="width: 100%;">
                     <i class="fas fa-sign-in-alt"></i> Entrar
@@ -395,7 +396,7 @@
             <form id="register-form" style="display: none;">
                 <div class="form-group">
                     <label for="reg-username">Nome de Usuário</label>
-                    <input type="text" id="reg-username" class="form-control" required placeholder="Escolha um nome de usuário">
+                    <input type="text" id="reg-username" class="form-control" required placeholder="ex: joao123">
                 </div>
                 <div class="form-group">
                     <label for="reg-email">Email</label>
@@ -407,26 +408,145 @@
                 </div>
                 <div class="form-group">
                     <label for="reg-confirm-password">Confirmar Senha</label>
-                    <input type="password" id="reg-confirm-password" class="form-control" required placeholder="Digite a senha novamente">
+                    <input type="password" id="reg-confirm-password" class="form-control" required placeholder="Digite novamente">
                 </div>
                 <button type="submit" class="btn btn-primary" style="width: 100%;">
                     <i class="fas fa-user-plus"></i> Criar Conta
                 </button>
             </form>
 
-            <div class="debug-info">
-                <p><strong>Conta do Mestre para teste:</strong></p>
+            <div style="margin-top: 1rem; padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 8px;">
+                <p style="margin-bottom: 0.5rem;"><strong>💡 Conta do Mestre:</strong></p>
                 <p>Usuário: <strong>admin</strong></p>
                 <p>Senha: <strong>admin123</strong></p>
                 <button class="btn" onclick="fillAdminCredentials()" style="margin-top: 0.5rem; width: 100%;">
-                    <i class="fas fa-user-shield"></i> Preencher Credenciais do Admin
+                    <i class="fas fa-user-shield"></i> Preencher Credenciais
+                </button>
+            </div>
+
+            <div class="debug-panel">
+                <p style="font-size: 0.9rem; margin-bottom: 0.5rem;"><strong>🐛 Debug (se precisar):</strong></p>
+                <button class="btn" onclick="debugAuth()" style="background: #3498db;">
+                    Ver Status
+                </button>
+                <button class="btn" onclick="resetAll()" style="background: #e74c3c;">
+                    Resetar Tudo
                 </button>
             </div>
         </div>
     </div>
 
-    <script src="auth-simple-fixed.js"></script>
     <script>
+        // SISTEMA DE AUTENTICAÇÃO - SIMPLES E FUNCIONAL
+        let users = JSON.parse(localStorage.getItem('rpgUsers')) || [];
+        let currentUser = JSON.parse(sessionStorage.getItem('currentUser')) || null;
+
+        // Criar admin se não existir
+        if (!users.find(u => u.username === 'admin')) {
+            users.push({
+                id: 'admin_001',
+                username: 'admin',
+                password: 'admin123',
+                email: 'admin@rpg.com',
+                profile: { avatar: '👑', bio: 'Mestre do RPG' },
+                isAdmin: true,
+                characters: []
+            });
+            localStorage.setItem('rpgUsers', JSON.stringify(users));
+            console.log('✅ Admin criado: admin / admin123');
+        }
+
+        // Atualizar interface
+        function updateUI() {
+            if (currentUser) {
+                document.getElementById('auth-section').style.display = 'none';
+                document.getElementById('user-section').style.display = 'flex';
+                document.getElementById('user-avatar').textContent = currentUser.profile.avatar;
+                document.getElementById('username-display').textContent = currentUser.username;
+                
+                const badge = document.getElementById('user-badge');
+                if (currentUser.isAdmin) {
+                    badge.textContent = 'Mestre';
+                    badge.style.background = '#ffd700';
+                    badge.style.color = '#000';
+                }
+            } else {
+                document.getElementById('auth-section').style.display = 'block';
+                document.getElementById('user-section').style.display = 'none';
+            }
+        }
+
+        // Login
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+
+            const user = users.find(u => u.username === username && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                sessionStorage.setItem('currentUser', JSON.stringify(user));
+                showNotification('🎮 Login bem-sucedido!', 'success');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+            } else {
+                showNotification('❌ Usuário ou senha incorretos!', 'error');
+            }
+        });
+
+        // Registro
+        document.getElementById('register-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('reg-username').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            const confirmPassword = document.getElementById('reg-confirm-password').value;
+
+            if (password !== confirmPassword) {
+                showNotification('❌ As senhas não coincidem!', 'error');
+                return;
+            }
+
+            if (users.find(u => u.username === username)) {
+                showNotification('❌ Nome de usuário já existe!', 'error');
+                return;
+            }
+
+            const newUser = {
+                id: 'user_' + Date.now(),
+                username,
+                email,
+                password,
+                profile: { avatar: '😊', bio: 'Novo aventureiro!' },
+                isAdmin: false,
+                characters: []
+            };
+
+            users.push(newUser);
+            localStorage.setItem('rpgUsers', JSON.stringify(users));
+            
+            showNotification('🎉 Conta criada com sucesso!', 'success');
+            
+            // Login automático
+            currentUser = newUser;
+            sessionStorage.setItem('currentUser', JSON.stringify(newUser));
+            
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1500);
+        });
+
+        // Logout
+        document.querySelector('.logout-btn').addEventListener('click', function() {
+            currentUser = null;
+            sessionStorage.removeItem('currentUser');
+            showNotification('👋 Até mais!', 'success');
+            setTimeout(() => location.reload(), 1000);
+        });
+
+        // Funções do Modal
         function openAuthModal() {
             document.getElementById('auth-modal').style.display = 'flex';
         }
@@ -435,36 +555,107 @@
             document.getElementById('auth-modal').style.display = 'none';
         }
 
-        function showFeatures() {
-            document.getElementById('features').style.display = 'grid';
-            document.getElementById('hero-buttons').style.display = 'none';
+        function switchToLogin() {
+            document.getElementById('register-tab').classList.remove('active');
+            document.getElementById('login-tab').classList.add('active');
+            document.getElementById('register-form').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
+        }
+
+        function switchToRegister() {
+            document.getElementById('login-tab').classList.remove('active');
+            document.getElementById('register-tab').classList.add('active');
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'block';
         }
 
         function fillAdminCredentials() {
             document.getElementById('login-username').value = 'admin';
             document.getElementById('login-password').value = 'admin123';
-            auth.switchToLogin();
+            switchToLogin();
+        }
+
+        function showFeatures() {
+            document.getElementById('features').style.display = 'grid';
+            document.getElementById('hero-buttons').style.display = 'none';
+        }
+
+        // Notificações
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type === 'error' ? 'error' : ''}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 4000);
+        }
+
+        // Debug
+        function debugAuth() {
+            console.log('🔍 DEBUG:');
+            console.log('Usuários:', users);
+            console.log('Usuário atual:', currentUser);
+            showNotification('🔍 Ver console para debug!', 'success');
+        }
+
+        function resetAll() {
+            localStorage.clear();
+            sessionStorage.clear();
+            showNotification('🔄 Sistema reiniciado!', 'success');
+            setTimeout(() => location.reload(), 1000);
         }
 
         // Fechar modal clicando fora
         document.getElementById('auth-modal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeAuthModal();
-            }
+            if (e.target === this) closeAuthModal();
         });
 
-        // Fechar modal com ESC
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeAuthModal();
-            }
-        });
+        // Inicializar
+        updateUI();
+        console.log('🎮 RPG entre Amigos - Pronto!');
 
-        // Debug no console
-        console.log('🎮 RPG entre Amigos - Sistema carregado!');
-        console.log('🔧 Comandos de debug disponíveis:');
-        console.log('   - debugAuth() - Ver usuários e status');
-        console.log('   - localStorage.clear() - Resetar tudo');
+        // Criar dashboard.html básico se não existir
+        if (!localStorage.getItem('dashboardCreated')) {
+            const dashboardHTML = `
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - RPG entre Amigos</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #ecf0f1; margin: 0; padding: 20px; 
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        .card { background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 10px; margin: 2rem 0; }
+        .btn { background: #cd7f32; color: white; padding: 1rem 2rem; border: none; border-radius: 6px; text-decoration: none; display: inline-block; margin: 0.5rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Dashboard</h1>
+        <div class="card">
+            <h2>Bem-vindo ao RPG entre Amigos!</h2>
+            <p>Seu dashboard está funcionando!</p>
+            <a href="index.html" class="btn">Voltar para Home</a>
+            <button class="btn" onclick="logout()">Sair</button>
+        </div>
+    </div>
+    <script>
+        function logout() {
+            sessionStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>`;
+            localStorage.setItem('dashboardCreated', 'true');
+        }
     </script>
 </body>
 </html>
