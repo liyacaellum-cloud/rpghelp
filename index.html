@@ -17,6 +17,7 @@
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: #ecf0f1;
             min-height: 100vh;
+            line-height: 1.6;
         }
 
         .container {
@@ -123,11 +124,16 @@
             padding: 1rem;
             cursor: pointer;
             border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
         }
 
         .auth-tab.active {
             border-bottom-color: #cd7f32;
             color: #ffd700;
+        }
+
+        .auth-tab:hover {
+            background: rgba(255,255,255,0.1);
         }
 
         .form-group {
@@ -138,6 +144,7 @@
             display: block;
             margin-bottom: 0.5rem;
             color: #bdc3c7;
+            font-weight: 500;
         }
 
         .form-control {
@@ -148,6 +155,13 @@
             border-radius: 4px;
             color: #ecf0f1;
             font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #cd7f32;
+            background: rgba(255,255,255,0.15);
         }
 
         .btn {
@@ -200,12 +214,72 @@
             border-radius: 10px;
             text-align: center;
             border: 1px solid #34495e;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: #cd7f32;
         }
 
         .feature-icon {
             font-size: 3rem;
             margin-bottom: 1rem;
             color: #ffd700;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: #16213e;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            border: 2px solid #cd7f32;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h2 {
+            color: #ffd700;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .debug-info {
+            background: rgba(0,0,0,0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            border-left: 3px solid #cd7f32;
         }
     </style>
 </head>
@@ -255,93 +329,103 @@
                 </button>
             </div>
 
-            <!-- Modal de Auth -->
-            <div id="auth-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;">
-                <div style="background: #16213e; padding: 2rem; border-radius: 10px; width: 90%; max-width: 400px; border: 2px solid #cd7f32;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                        <h2>Junte-se à Turma!</h2>
-                        <button onclick="closeAuthModal()" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;">&times;</button>
-                    </div>
-
-                    <div class="auth-tabs">
-                        <div class="auth-tab active" id="login-tab" onclick="auth.switchToLogin()">Entrar</div>
-                        <div class="auth-tab" id="register-tab" onclick="auth.switchToRegister()">Registrar</div>
-                    </div>
-
-                    <form id="login-form">
-                        <div class="form-group">
-                            <label>Usuário</label>
-                            <input type="text" id="login-username" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Senha</label>
-                            <input type="password" id="login-password" class="form-control" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%;">
-                            <i class="fas fa-sign-in-alt"></i> Entrar
-                        </button>
-                    </form>
-
-                    <form id="register-form" style="display: none;">
-                        <div class="form-group">
-                            <label>Nome de Usuário</label>
-                            <input type="text" id="reg-username" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" id="reg-email" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Senha</label>
-                            <input type="password" id="reg-password" class="form-control" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%;">
-                            <i class="fas fa-user-plus"></i> Criar Conta
-                        </button>
-                    </form>
-
-                    <div style="margin-top: 1rem; text-align: center; font-size: 0.9rem; opacity: 0.7;">
-                        <p>Conta do Mestre: usuário <strong>admin</strong>, senha <strong>admin123</strong></p>
-                    </div>
+            <!-- Features Section -->
+            <section class="features" id="features" style="display: none;">
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3>Perfis de Usuário</h3>
+                    <p>Crie seu perfil personalizado com avatar, bio e classe favorita</p>
                 </div>
-            </div>
-        </section>
-
-        <section class="features" id="features" style="display: none;">
-            <div class="feature-card">
-                <div class="feature-icon">👥</div>
-                <h3>Perfis de Usuário</h3>
-                <p>Crie seu perfil personalizado com avatar, bio e classe favorita</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🎭</div>
-                <h3>Personagens</h3>
-                <p>Crie e gerencie seus personagens de RPG de forma fácil</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🎲</div>
-                <h3>Rolagem de Dados</h3>
-                <p>Sistema de rolagem de dados integrado para suas aventuras</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">📚</div>
-                <h3>Bestiário & Magias</h3>
-                <p>Consulte monstros e magias (apenas o Mestre edita)</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">👑</div>
-                <h3>Sistema de Mestre</h3>
-                <p>O Mestre tem controle total sobre o conteúdo compartilhado</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">💬</div>
-                <h3>Comunidade</h3>
-                <p>Veja os personagens dos amigos e compartilhe suas aventuras</p>
-            </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎭</div>
+                    <h3>Personagens</h3>
+                    <p>Crie e gerencie seus personagens de RPG de forma fácil</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎲</div>
+                    <h3>Rolagem de Dados</h3>
+                    <p>Sistema de rolagem de dados integrado para suas aventuras</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3>Bestiário & Magias</h3>
+                    <p>Consulte monstros e magias (apenas o Mestre edita)</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👑</div>
+                    <h3>Sistema de Mestre</h3>
+                    <p>O Mestre tem controle total sobre o conteúdo compartilhado</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3>Comunidade</h3>
+                    <p>Veja os personagens dos amigos e compartilhe suas aventuras</p>
+                </div>
+            </section>
         </section>
     </div>
 
-    <script src="auth-simple.js"></script>
+    <!-- Modal de Auth -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Junte-se à Turma!</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+
+            <div class="auth-tabs">
+                <div class="auth-tab active" id="login-tab" onclick="auth.switchToLogin()">Entrar</div>
+                <div class="auth-tab" id="register-tab" onclick="auth.switchToRegister()">Registrar</div>
+            </div>
+
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-username">Usuário</label>
+                    <input type="text" id="login-username" class="form-control" required placeholder="Digite seu usuário">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Senha</label>
+                    <input type="password" id="login-password" class="form-control" required placeholder="Digite sua senha">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-sign-in-alt"></i> Entrar
+                </button>
+            </form>
+
+            <form id="register-form" style="display: none;">
+                <div class="form-group">
+                    <label for="reg-username">Nome de Usuário</label>
+                    <input type="text" id="reg-username" class="form-control" required placeholder="Escolha um nome de usuário">
+                </div>
+                <div class="form-group">
+                    <label for="reg-email">Email</label>
+                    <input type="email" id="reg-email" class="form-control" required placeholder="seu@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="reg-password">Senha</label>
+                    <input type="password" id="reg-password" class="form-control" required placeholder="Mínimo 3 caracteres">
+                </div>
+                <div class="form-group">
+                    <label for="reg-confirm-password">Confirmar Senha</label>
+                    <input type="password" id="reg-confirm-password" class="form-control" required placeholder="Digite a senha novamente">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-user-plus"></i> Criar Conta
+                </button>
+            </form>
+
+            <div class="debug-info">
+                <p><strong>Conta do Mestre para teste:</strong></p>
+                <p>Usuário: <strong>admin</strong></p>
+                <p>Senha: <strong>admin123</strong></p>
+                <button class="btn" onclick="fillAdminCredentials()" style="margin-top: 0.5rem; width: 100%;">
+                    <i class="fas fa-user-shield"></i> Preencher Credenciais do Admin
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth-simple-fixed.js"></script>
     <script>
         function openAuthModal() {
             document.getElementById('auth-modal').style.display = 'flex';
@@ -356,12 +440,31 @@
             document.getElementById('hero-buttons').style.display = 'none';
         }
 
+        function fillAdminCredentials() {
+            document.getElementById('login-username').value = 'admin';
+            document.getElementById('login-password').value = 'admin123';
+            auth.switchToLogin();
+        }
+
         // Fechar modal clicando fora
         document.getElementById('auth-modal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeAuthModal();
             }
         });
+
+        // Fechar modal com ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAuthModal();
+            }
+        });
+
+        // Debug no console
+        console.log('🎮 RPG entre Amigos - Sistema carregado!');
+        console.log('🔧 Comandos de debug disponíveis:');
+        console.log('   - debugAuth() - Ver usuários e status');
+        console.log('   - localStorage.clear() - Resetar tudo');
     </script>
 </body>
 </html>
