@@ -3,552 +3,365 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RPG Master Ultra - Sistema de RPG Definitivo</title>
+    <title>RPG entre Amigos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=MedievalSharp&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #ecf0f1;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem 2rem;
+            border-bottom: 2px solid #cd7f32;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .logo i {
+            margin-right: 0.5rem;
+        }
+
+        .user-section {
+            display: none;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #cd7f32;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .user-badge {
+            background: #4ecdc4;
+            color: white;
+            padding: 0.2rem 0.8rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ffd700;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        /* Auth Section */
+        #auth-section {
+            max-width: 400px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 10px;
+            border: 1px solid #34495e;
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #34495e;
+        }
+
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+
+        .auth-tab.active {
+            border-bottom-color: #cd7f32;
+            color: #ffd700;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #bdc3c7;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid #34495e;
+            border-radius: 4px;
+            color: #ecf0f1;
+            font-size: 1rem;
+        }
+
+        .btn {
+            background: #cd7f32;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            background: #ffd700;
+            color: #2c3e50;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: #e74c3c;
+        }
+
+        .btn-primary:hover {
+            background: #c0392b;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .feature-card {
+            background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #34495e;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ffd700;
+        }
+    </style>
 </head>
 <body>
-    <div class="particles" id="particles"></div>
-    <div class="notification" id="notification">
-        <i class="fas fa-check-circle"></i>
-        <span id="notification-text">Operação realizada com sucesso!</span>
-    </div>
-    
-    <div class="app-container">
-        <!-- Sidebar -->
-        <div class="sidebar">
+    <header class="header">
+        <nav class="nav">
             <div class="logo">
-                <h1>RPG Master Ultra</h1>
-                <p>Sistema Definitivo de Gerenciamento de RPG</p>
+                <i class="fas fa-dragon"></i>
+                RPG entre Amigos
             </div>
             
-            <div class="campaign-selector">
-                <label for="campaign">Campanha Ativa:</label>
-                <select id="campaign">
-                    <option value="default">Aventura Principal</option>
-                    <option value="side">Missão Secundária</option>
-                    <option value="new">Nova Campanha</option>
-                </select>
-            </div>
-            
-            <ul class="nav-menu">
-                <li class="nav-item">
-                    <a href="index.html" class="nav-link active">
-                        <i class="fas fa-tachometer-alt"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="personagens.html" class="nav-link">
-                        <i class="fas fa-users"></i>
-                        <span>Personagens</span>
-                        <span class="nav-badge" id="char-count">0</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="dados.html" class="nav-link">
-                        <i class="fas fa-dice-d20"></i>
-                        <span>Mesa de Dados</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="iniciativa.html" class="nav-link">
-                        <i class="fas fa-list-ol"></i>
-                        <span>Iniciativa</span>
-                        <span class="nav-badge" id="init-count">0</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="bestiario.html" class="nav-link">
-                        <i class="fas fa-dragon"></i>
-                        <span>Bestiário</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="magias.html" class="nav-link">
-                        <i class="fas fa-magic"></i>
-                        <span>Grimório</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="anotacoes.html" class="nav-link">
-                        <i class="fas fa-scroll"></i>
-                        <span>Anotações</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="mapas.html" class="nav-link">
-                        <i class="fas fa-map"></i>
-                        <span>Mapas</span>
-                        <span class="nav-badge">Em breve</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="configuracoes.html" class="nav-link">
-                        <i class="fas fa-cog"></i>
-                        <span>Configurações</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-        
-        <!-- Main Content -->
-        <div class="main-content">
-            <div class="header">
-                <h2>Dashboard</h2>
-                <div class="user-actions">
-                    <button class="btn btn-gold" id="quick-roll">
-                        <i class="fas fa-dice-d20"></i>
-                        Rolar d20
-                    </button>
-                    <button class="btn btn-secondary" id="save-data">
-                        <i class="fas fa-save"></i>
-                        Salvar Tudo
-                    </button>
-                    <button class="btn btn-magic" id="export-data">
-                        <i class="fas fa-file-export"></i>
-                        Exportar
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Dashboard -->
-            <div class="dashboard">
-                <div class="dashboard-card">
-                    <div class="card-header">
-                        <h3>Resumo da Campanha</h3>
-                        <div class="card-icon">
-                            <i class="fas fa-crown"></i>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <p>Bem-vindo à sua aventura épica! Aqui está um resumo do progresso atual.</p>
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <span class="stat-value" id="total-chars">0</span>
-                                <span class="stat-label">Personagens</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-value" id="active-init">0</span>
-                                <span class="stat-label">Em Combate</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-value" id="session-time">0h</span>
-                                <span class="stat-label">Duração</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-value" id="total-rolls">0</span>
-                                <span class="stat-label">Rolagens</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="dashboard-card">
-                    <div class="card-header">
-                        <h3>Próximo na Iniciativa</h3>
-                        <div class="card-icon">
-                            <i class="fas fa-list-ol"></i>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <p id="next-initiative">Nenhum combate ativo</p>
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <span class="stat-value" id="current-turn">-</span>
-                                <span class="stat-label">Turno Atual</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-value" id="round-count">1</span>
-                                <span class="stat-label">Rodada</span>
-                            </div>
-                        </div>
-                        <button class="btn btn-secondary" style="margin-top: 1rem; width: 100%;" id="go-to-initiative">
-                            <i class="fas fa-arrow-right"></i>
-                            Gerenciar Iniciativa
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="dashboard-card">
-                    <div class="card-header">
-                        <h3>Rolagem Rápida</h3>
-                        <div class="card-icon">
-                            <i class="fas fa-dice"></i>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <p>Clique para rolar dados rapidamente</p>
-                        <div style="display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap;">
-                            <button class="action-btn" data-quick-roll="d20">d20</button>
-                            <button class="action-btn" data-quick-roll="d6">d6</button>
-                            <button class="action-btn" data-quick-roll="2d6">2d6</button>
-                            <button class="action-btn" data-quick-roll="d100">d100</button>
-                            <button class="action-btn" data-quick-roll="4d6k3">4d6k3</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="header" style="margin-top: 2rem;">
-                <h2>Personagens da Campanha</h2>
-                <button class="btn" id="add-character-dash">
-                    <i class="fas fa-plus"></i>
-                    Novo Personagem
+            <div id="auth-section">
+                <button class="btn" onclick="openAuthModal()">
+                    <i class="fas fa-sign-in-alt"></i> Entrar
                 </button>
             </div>
-            <div class="character-grid" id="dashboard-characters">
-                <!-- Character cards will be loaded here -->
+
+            <div id="user-section" class="user-section">
+                <div class="user-info">
+                    <div class="user-avatar" id="user-avatar">😊</div>
+                    <div>
+                        <div class="username" id="username-display"></div>
+                        <div class="user-badge" id="user-badge">Aventureiro</div>
+                    </div>
+                </div>
+                <a href="dashboard.html" class="btn">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+                <button class="btn logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </button>
             </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <section class="hero">
+            <h1>RPG entre Amigos</h1>
+            <p>Uma plataforma descontraída para gerenciar suas aventuras de RPG com os amigos</p>
             
-            <div class="header" style="margin-top: 2rem;">
-                <h2>Mesa de Dados Rápida</h2>
+            <div class="hero-actions" id="hero-buttons">
+                <button class="btn btn-primary" onclick="openAuthModal()">
+                    <i class="fas fa-rocket"></i> Começar Agora
+                </button>
+                <button class="btn" onclick="showFeatures()">
+                    <i class="fas fa-info-circle"></i> Conhecer Features
+                </button>
             </div>
-            <div class="dice-section">
-                <div class="dice-container">
-                    <div class="dice" data-sides="4">d4</div>
-                    <div class="dice" data-sides="6">d6</div>
-                    <div class="dice" data-sides="8">d8</div>
-                    <div class="dice" data-sides="10">d10</div>
-                    <div class="dice" data-sides="12">d12</div>
-                    <div class="dice" data-sides="20">d20</div>
-                    <div class="dice" data-sides="100">d100</div>
+
+            <!-- Modal de Auth -->
+            <div id="auth-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center;">
+                <div style="background: #16213e; padding: 2rem; border-radius: 10px; width: 90%; max-width: 400px; border: 2px solid #cd7f32;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h2>Junte-se à Turma!</h2>
+                        <button onclick="closeAuthModal()" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;">&times;</button>
+                    </div>
+
+                    <div class="auth-tabs">
+                        <div class="auth-tab active" id="login-tab" onclick="auth.switchToLogin()">Entrar</div>
+                        <div class="auth-tab" id="register-tab" onclick="auth.switchToRegister()">Registrar</div>
+                    </div>
+
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label>Usuário</label>
+                            <input type="text" id="login-username" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Senha</label>
+                            <input type="password" id="login-password" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            <i class="fas fa-sign-in-alt"></i> Entrar
+                        </button>
+                    </form>
+
+                    <form id="register-form" style="display: none;">
+                        <div class="form-group">
+                            <label>Nome de Usuário</label>
+                            <input type="text" id="reg-username" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="reg-email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Senha</label>
+                            <input type="password" id="reg-password" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            <i class="fas fa-user-plus"></i> Criar Conta
+                        </button>
+                    </form>
+
+                    <div style="margin-top: 1rem; text-align: center; font-size: 0.9rem; opacity: 0.7;">
+                        <p>Conta do Mestre: usuário <strong>admin</strong>, senha <strong>admin123</strong></p>
+                    </div>
                 </div>
-                <div class="dice-result" id="dice-result"></div>
             </div>
-            
-            <footer>
-                <p>RPG Master Ultra &copy; 2023 - Sistema Definitivo de Gerenciamento de RPG</p>
-            </footer>
-        </div>
-    </div>
-    
-    <!-- Modal para Adicionar/Editar Personagem -->
-    <div id="character-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title" id="modal-character-title">Adicionar Personagem</h3>
-                <button class="close-modal">&times;</button>
+        </section>
+
+        <section class="features" id="features" style="display: none;">
+            <div class="feature-card">
+                <div class="feature-icon">👥</div>
+                <h3>Perfis de Usuário</h3>
+                <p>Crie seu perfil personalizado com avatar, bio e classe favorita</p>
             </div>
-            <form id="character-form">
-                <input type="hidden" id="character-id">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="character-name">Nome *</label>
-                        <input type="text" id="character-name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="character-class">Classe</label>
-                        <input type="text" id="character-class" placeholder="ex: Guerreiro, Mago...">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="character-race">Raça</label>
-                        <input type="text" id="character-race" placeholder="ex: Humano, Elfo...">
-                    </div>
-                    <div class="form-group">
-                        <label for="character-level">Nível *</label>
-                        <input type="number" id="character-level" min="1" max="20" value="1" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="character-hp">Pontos de Vida *</label>
-                        <input type="number" id="character-hp" min="0" value="10" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="character-max-hp">PV Máximos *</label>
-                        <input type="number" id="character-max-hp" min="1" value="10" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="character-ac">Classe de Armadura *</label>
-                        <input type="number" id="character-ac" min="0" value="10" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="character-speed">Deslocamento</label>
-                        <input type="number" id="character-speed" min="0" value="30">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="character-description">Descrição &amp; Anotações</label>
-                    <textarea id="character-description" rows="3" placeholder="História, personalidade, equipamentos..."></textarea>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn" style="width: 100%;">
-                        <i class="fas fa-save"></i>
-                        Salvar Personagem
-                    </button>
-                </div>
-            </form>
-        </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎭</div>
+                <h3>Personagens</h3>
+                <p>Crie e gerencie seus personagens de RPG de forma fácil</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎲</div>
+                <h3>Rolagem de Dados</h3>
+                <p>Sistema de rolagem de dados integrado para suas aventuras</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📚</div>
+                <h3>Bestiário & Magias</h3>
+                <p>Consulte monstros e magias (apenas o Mestre edita)</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">👑</div>
+                <h3>Sistema de Mestre</h3>
+                <p>O Mestre tem controle total sobre o conteúdo compartilhado</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3>Comunidade</h3>
+                <p>Veja os personagens dos amigos e compartilhe suas aventuras</p>
+            </div>
+        </section>
     </div>
 
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/characters.js"></script>
+    <script src="auth-simple.js"></script>
     <script>
-        // Inicialização específica do dashboard
-        document.addEventListener('DOMContentLoaded', function() {
-            // Atualizar contadores do dashboard
-            updateDashboardCounters();
-            
-            // Carregar personagens no dashboard
-            loadDashboardCharacters();
-            
-            // Configurar event listeners
-            setupDashboardEventListeners();
+        function openAuthModal() {
+            document.getElementById('auth-modal').style.display = 'flex';
+        }
+
+        function closeAuthModal() {
+            document.getElementById('auth-modal').style.display = 'none';
+        }
+
+        function showFeatures() {
+            document.getElementById('features').style.display = 'grid';
+            document.getElementById('hero-buttons').style.display = 'none';
+        }
+
+        // Fechar modal clicando fora
+        document.getElementById('auth-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAuthModal();
+            }
         });
-        
-        function setupDashboardEventListeners() {
-            // Botão rolar d20 rápido
-            const quickRollBtn = document.getElementById('quick-roll');
-            if (quickRollBtn) {
-                quickRollBtn.addEventListener('click', function() {
-                    rollDice(1, 20);
-                });
-            }
-            
-            // Botão salvar dados
-            const saveDataBtn = document.getElementById('save-data');
-            if (saveDataBtn) {
-                saveDataBtn.addEventListener('click', function() {
-                    saveCharacters();
-                    showNotification('Todos os dados foram salvos com sucesso!');
-                });
-            }
-            
-            // Botão exportar dados
-            const exportDataBtn = document.getElementById('export-data');
-            if (exportDataBtn) {
-                exportDataBtn.addEventListener('click', function() {
-                    const data = {
-                        characters: loadFromLocalStorage('rpgCharacters') || [],
-                        notes: loadFromLocalStorage('rpgNotes') || '',
-                        initiative: loadFromLocalStorage('rpgInitiative') || [],
-                        rollHistory: loadFromLocalStorage('rpgRollHistory') || []
-                    };
-                    
-                    exportData(data, 'rpg-master-ultra-backup.json');
-                });
-            }
-            
-            // Botão adicionar personagem no dashboard
-            const addCharacterDashBtn = document.getElementById('add-character-dash');
-            if (addCharacterDashBtn) {
-                addCharacterDashBtn.addEventListener('click', openCharacterModal);
-            }
-            
-            // Botão ir para iniciativa
-            const goToInitiativeBtn = document.getElementById('go-to-initiative');
-            if (goToInitiativeBtn) {
-                goToInitiativeBtn.addEventListener('click', function() {
-                    window.location.href = 'iniciativa.html';
-                });
-            }
-            
-            // Rolagem rápida de dados
-            document.querySelectorAll('[data-quick-roll]').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const roll = this.getAttribute('data-quick-roll');
-                    if (roll === 'd20') rollDice(1, 20);
-                    else if (roll === 'd6') rollDice(1, 6);
-                    else if (roll === '2d6') rollDice(2, 6);
-                    else if (roll === 'd100') rollDice(1, 100);
-                    else if (roll === '4d6k3') {
-                        // 4d6 keep highest 3
-                        const rolls = [];
-                        for (let i = 0; i < 4; i++) {
-                            rolls.push(Math.floor(Math.random() * 6) + 1);
-                        }
-                        rolls.sort((a, b) => b - a);
-                        const total = rolls[0] + rolls[1] + rolls[2];
-                        const resultText = `4d6k3: [${rolls.join(', ')}] = ${total}`;
-                        document.getElementById('dice-result').textContent = resultText;
-                        addToRollHistory(resultText);
-                        updateDashboardCounters();
-                        showNotification('Rolagem 4d6 (maiores 3) realizada!');
-                    }
-                });
-            });
-            
-            // Rolagem de dados na mesa
-            document.querySelectorAll('.dice').forEach(dice => {
-                dice.addEventListener('click', function() {
-                    const sides = parseInt(this.getAttribute('data-sides'));
-                    rollDice(1, sides);
-                });
-            });
-        }
-        
-        function updateDashboardCounters() {
-            const characters = loadFromLocalStorage('rpgCharacters') || [];
-            const initiative = loadFromLocalStorage('rpgInitiative') || [];
-            const rolls = loadFromLocalStorage('rpgRollHistory') || [];
-            
-            document.getElementById('total-chars').textContent = characters.length;
-            document.getElementById('active-init').textContent = initiative.length;
-            document.getElementById('total-rolls').textContent = rolls.length;
-            
-            // Atualizar badges na sidebar
-            document.getElementById('char-count').textContent = characters.length;
-            document.getElementById('init-count').textContent = initiative.length;
-            
-            // Atualizar informações de iniciativa
-            if (initiative.length > 0) {
-                const currentTurn = parseInt(localStorage.getItem('rpgCurrentTurn')) || 0;
-                const nextTurnIndex = (currentTurn + 1) % initiative.length;
-                document.getElementById('next-initiative').textContent = `Próximo: ${initiative[nextTurnIndex].name}`;
-                document.getElementById('current-turn').textContent = initiative[currentTurn].name;
-            } else {
-                document.getElementById('next-initiative').textContent = 'Nenhum combate ativo';
-                document.getElementById('current-turn').textContent = '-';
-            }
-            
-            // Atualizar rodada
-            const currentRound = parseInt(localStorage.getItem('rpgCurrentRound')) || 1;
-            document.getElementById('round-count').textContent = currentRound;
-            
-            // Calcular tempo estimado de sessão (exemplo)
-            const sessionHours = Math.floor(rolls.length / 10);
-            document.getElementById('session-time').textContent = `${sessionHours}h`;
-        }
-        
-        function loadDashboardCharacters() {
-            const characters = loadFromLocalStorage('rpgCharacters') || [];
-            const dashboardCharacters = document.getElementById('dashboard-characters');
-            
-            if (!dashboardCharacters) return;
-            
-            if (characters.length === 0) {
-                dashboardCharacters.innerHTML = `
-                    <div class="dashboard-card" style="grid-column: 1 / -1;">
-                        <div class="card-header">
-                            <h3>Nenhum Personagem</h3>
-                            <div class="card-icon">
-                                <i class="fas fa-users"></i>
-                            </div>
-                        </div>
-                        <div class="card-content">
-                            <p>Nenhum personagem cadastrado. Clique em "Novo Personagem" para começar.</p>
-                        </div>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Mostrar apenas os primeiros 3 personagens no dashboard
-            const charsToShow = characters.slice(0, 3);
-            dashboardCharacters.innerHTML = charsToShow.map(character => {
-                const hpPercent = (character.hp / character.maxHp) * 100;
-                
-                return `
-                    <div class="character-card">
-                        <div class="character-header">
-                            <div>
-                                <div class="character-name">${character.name}</div>
-                                <div class="character-class">${character.race || ''} ${character.class || ''}</div>
-                            </div>
-                            <div class="character-level">Nv. ${character.level}</div>
-                        </div>
-                        <div class="character-body">
-                            <div class="character-stats">
-                                <div class="stat">
-                                    <span>PV:</span>
-                                    <span class="stat-value">${character.hp}/${character.maxHp}</span>
-                                </div>
-                                <div class="stat">
-                                    <span>CA:</span>
-                                    <span class="stat-value">${character.ac}</span>
-                                </div>
-                            </div>
-                            <div class="resource-bars">
-                                <div class="resource-bar">
-                                    <div class="resource-label">
-                                        <span>Pontos de Vida</span>
-                                        <span>${character.hp}/${character.maxHp}</span>
-                                    </div>
-                                    <div class="bar-container">
-                                        <div class="bar-fill health-bar" style="width: ${hpPercent}%"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="character-actions">
-                                <button class="action-btn" onclick="location.href='personagens.html'">
-                                    <i class="fas fa-edit"></i> Ver Detalhes
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-        
-        function rollDice(count, sides) {
-            // Efeito visual de rolagem
-            const diceResult = document.getElementById('dice-result');
-            diceResult.textContent = "Rolando...";
-            diceResult.style.opacity = '0.5';
-            
-            // Adicionar classe de animação aos dados
-            document.querySelectorAll('.dice').forEach(dice => {
-                if (parseInt(dice.getAttribute('data-sides')) === sides || count > 1) {
-                    dice.classList.add('dice-rolling');
-                }
-            });
-            
-            setTimeout(() => {
-                let results = [];
-                let total = 0;
-                
-                for (let i = 0; i < count; i++) {
-                    const roll = Math.floor(Math.random() * sides) + 1;
-                    results.push(roll);
-                    total += roll;
-                }
-                
-                let resultText = `Rolagem: ${count}d${sides} = `;
-                
-                if (count > 1) {
-                    resultText += `${results.join(' + ')} = ${total}`;
-                } else {
-                    resultText += total;
-                }
-                
-                diceResult.textContent = resultText;
-                diceResult.style.opacity = '1';
-                
-                // Remover classe de animação
-                document.querySelectorAll('.dice').forEach(dice => {
-                    dice.classList.remove('dice-rolling');
-                });
-                
-                // Adicionar ao histórico
-                addToRollHistory(resultText);
-                updateDashboardCounters();
-                showNotification(`Rolagem de ${count}d${sides} realizada!`);
-            }, 500);
-        }
-        
-        function addToRollHistory(rollText) {
-            let rollHistory = loadFromLocalStorage('rpgRollHistory') || [];
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-            
-            rollHistory.unshift({
-                text: rollText,
-                time: timeString
-            });
-            
-            // Manter apenas os últimos 50 registros
-            if (rollHistory.length > 50) {
-                rollHistory = rollHistory.slice(0, 50);
-            }
-            
-            saveToLocalStorage('rpgRollHistory', rollHistory);
-        }
     </script>
 </body>
 </html>
