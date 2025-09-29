@@ -1,45 +1,54 @@
-// auth-simple-fixed.js - SISTEMA CORRIGIDO
-class SimpleAuth {
+// auth-system-fixed.js - SISTEMA 100% FUNCIONAL
+class AuthSystem {
     constructor() {
         this.currentUser = null;
         this.users = JSON.parse(localStorage.getItem('rpgUsers')) || [];
+        console.log('🔧 Sistema de Auth iniciado. Usuários:', this.users);
         this.init();
     }
 
     init() {
-        // Criar admin se não existir
+        // Criar admin padrão se não existir
         if (!this.users.find(u => u.username === 'admin')) {
-            this.users.push({
-                id: 'admin_001',
-                username: 'admin',
-                password: 'admin123', // Senha visível apenas para desenvolvimento
-                email: 'admin@rpg.com',
-                profile: {
-                    avatar: '👑',
-                    bio: 'Mestre do RPG',
-                    favoriteClass: 'Mestre',
-                    joinDate: new Date().toISOString()
-                },
-                isAdmin: true,
-                characters: [],
-                notes: [],
-                friends: [],
-                createdAt: new Date().toISOString()
-            });
-            localStorage.setItem('rpgUsers', JSON.stringify(this.users));
-            console.log('✅ Usuário admin criado: admin / admin123');
+            this.createDefaultAdmin();
         }
         
         this.checkLoginStatus();
         this.setupEventListeners();
     }
 
+    createDefaultAdmin() {
+        const adminUser = {
+            id: 'admin_001',
+            username: 'admin',
+            password: 'admin123',
+            email: 'admin@rpg.com',
+            profile: {
+                avatar: '👑',
+                bio: 'Mestre do RPG',
+                favoriteClass: 'Mestre',
+                joinDate: new Date().toISOString()
+            },
+            isAdmin: true,
+            characters: [],
+            notes: [],
+            friends: [],
+            createdAt: new Date().toISOString()
+        };
+        this.users.push(adminUser);
+        localStorage.setItem('rpgUsers', JSON.stringify(this.users));
+        console.log('✅ Admin criado: admin / admin123');
+    }
+
     setupEventListeners() {
+        console.log('🔧 Configurando event listeners...');
+        
         // Login form
         const loginForm = document.getElementById('login-form');
         if (loginForm) {
             loginForm.addEventListener('submit', (e) => {
                 e.preventDefault();
+                console.log('📝 Formulário de login submetido');
                 this.login();
             });
         }
@@ -49,6 +58,7 @@ class SimpleAuth {
         if (registerForm) {
             registerForm.addEventListener('submit', (e) => {
                 e.preventDefault();
+                console.log('📝 Formulário de registro submetido');
                 this.register();
             });
         }
@@ -57,6 +67,12 @@ class SimpleAuth {
         document.querySelectorAll('.logout-btn').forEach(btn => {
             btn.addEventListener('click', () => this.logout());
         });
+
+        // Tabs de login/registro
+        const loginTab = document.getElementById('login-tab');
+        const registerTab = document.getElementById('register-tab');
+        if (loginTab) loginTab.addEventListener('click', () => this.switchToLogin());
+        if (registerTab) registerTab.addEventListener('click', () => this.switchToRegister());
     }
 
     register() {
@@ -65,32 +81,27 @@ class SimpleAuth {
         const password = document.getElementById('reg-password').value;
         const confirmPassword = document.getElementById('reg-confirm-password').value;
 
-        console.log('Tentativa de registro:', { username, email });
+        console.log('🔄 Tentando registrar:', { username, email });
 
-        // Validações básicas
+        // Validações
         if (!username || !email || !password) {
-            this.showNotification('Preencha todos os campos!', 'error');
-            return;
-        }
-
-        if (password !== confirmPassword) {
-            this.showNotification('As senhas não coincidem!', 'error');
+            this.showNotification('❌ Preencha todos os campos!', 'error');
             return;
         }
 
         if (password.length < 3) {
-            this.showNotification('Senha muito curta! Mínimo 3 caracteres.', 'error');
+            this.showNotification('❌ Senha muito curta! Mínimo 3 caracteres.', 'error');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            this.showNotification('❌ As senhas não coincidem!', 'error');
             return;
         }
 
         // Verificar se usuário já existe
         if (this.users.find(u => u.username.toLowerCase() === username.toLowerCase())) {
-            this.showNotification('Nome de usuário já existe! Escolha outro.', 'error');
-            return;
-        }
-
-        if (this.users.find(u => u.email.toLowerCase() === email.toLowerCase())) {
-            this.showNotification('Email já cadastrado!', 'error');
+            this.showNotification('❌ Nome de usuário já existe!', 'error');
             return;
         }
 
@@ -118,9 +129,9 @@ class SimpleAuth {
         localStorage.setItem('rpgUsers', JSON.stringify(this.users));
         
         console.log('✅ Novo usuário registrado:', newUser);
-        this.showNotification(`🎉 Bem-vindo, ${username}! Conta criada com sucesso!`, 'success');
+        this.showNotification(`🎉 Bem-vindo, ${username}! Login automático...`, 'success');
         
-        // Fazer login automaticamente
+        // Login automático
         this.currentUser = newUser;
         sessionStorage.setItem('currentUser', JSON.stringify(newUser));
         
@@ -133,8 +144,9 @@ class SimpleAuth {
         const username = document.getElementById('login-username').value.trim();
         const password = document.getElementById('login-password').value;
 
-        console.log('Tentativa de login:', username);
+        console.log('🔄 Tentando login:', username);
 
+        // Encontrar usuário
         const user = this.users.find(u => 
             u.username === username && u.password === password
         );
@@ -143,13 +155,13 @@ class SimpleAuth {
             this.currentUser = user;
             sessionStorage.setItem('currentUser', JSON.stringify(user));
             console.log('✅ Login bem-sucedido:', user.username);
-            this.showNotification(`🎮 E aí, ${user.username}! Bem-vindo de volta!`, 'success');
+            this.showNotification(`🎮 Bem-vindo, ${user.username}!`, 'success');
             
             setTimeout(() => {
                 window.location.href = 'dashboard.html';
             }, 1000);
         } else {
-            console.log('❌ Login falhou para:', username);
+            console.log('❌ Login falhou');
             this.showNotification('❌ Usuário ou senha incorretos!', 'error');
         }
     }
@@ -168,7 +180,7 @@ class SimpleAuth {
             if (savedUser) {
                 this.currentUser = JSON.parse(savedUser);
                 this.updateUIForLoggedInUser();
-                console.log('✅ Usuário já logado:', this.currentUser.username);
+                console.log('✅ Usuário logado:', this.currentUser.username);
             }
         } catch (e) {
             console.error('Erro ao verificar login:', e);
@@ -183,23 +195,36 @@ class SimpleAuth {
         if (authSection) authSection.style.display = 'none';
         if (userSection) {
             userSection.style.display = 'flex';
-            const avatarEl = document.getElementById('user-avatar');
-            const usernameEl = document.getElementById('username-display');
-            const badgeEl = document.getElementById('user-badge');
+            document.getElementById('user-avatar').textContent = this.currentUser.profile.avatar;
+            document.getElementById('username-display').textContent = this.currentUser.username;
             
-            if (avatarEl) avatarEl.textContent = this.currentUser.profile.avatar;
-            if (usernameEl) usernameEl.textContent = this.currentUser.username;
-            
-            if (badgeEl) {
+            const badge = document.getElementById('user-badge');
+            if (badge) {
                 if (this.currentUser.isAdmin) {
-                    badgeEl.textContent = 'Mestre';
-                    badgeEl.style.background = '#ffd700';
-                    badgeEl.style.color = '#000';
+                    badge.textContent = 'Mestre';
+                    badge.style.background = '#ffd700';
+                    badge.style.color = '#000';
                 } else {
-                    badgeEl.textContent = 'Aventureiro';
+                    badge.textContent = 'Aventureiro';
                 }
             }
         }
+    }
+
+    switchToLogin() {
+        console.log('🔁 Mudando para login');
+        document.getElementById('register-tab').classList.remove('active');
+        document.getElementById('login-tab').classList.add('active');
+        document.getElementById('register-form').style.display = 'none';
+        document.getElementById('login-form').style.display = 'block';
+    }
+
+    switchToRegister() {
+        console.log('🔁 Mudando para registro');
+        document.getElementById('login-tab').classList.remove('active');
+        document.getElementById('register-tab').classList.add('active');
+        document.getElementById('login-form').style.display = 'none';
+        document.getElementById('register-form').style.display = 'block';
     }
 
     getRandomColor() {
@@ -208,7 +233,7 @@ class SimpleAuth {
     }
 
     showNotification(message, type = 'success') {
-        // Remover notificações existentes
+        // Remover notificações antigas
         document.querySelectorAll('.notification').forEach(n => n.remove());
         
         const notification = document.createElement('div');
@@ -217,67 +242,39 @@ class SimpleAuth {
             position: fixed;
             top: 20px;
             right: 20px;
-            background: ${type === 'error' ? '#ff6b6b' : '#4ecdc4'};
+            background: ${type === 'error' ? '#e74c3c' : '#27ae60'};
             color: white;
             padding: 16px 24px;
-            border-radius: 10px;
+            border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             z-index: 10000;
             font-weight: bold;
             font-size: 16px;
-            max-width: 400px;
-            word-wrap: break-word;
         `;
         notification.textContent = message;
         document.body.appendChild(notification);
 
         setTimeout(() => {
-            notification.style.opacity = '0';
-            notification.style.transition = 'opacity 0.5s ease';
-            setTimeout(() => notification.remove(), 500);
+            notification.remove();
         }, 4000);
     }
 
-    switchToLogin() {
-        const loginTab = document.getElementById('login-tab');
-        const registerTab = document.getElementById('register-tab');
-        const loginForm = document.getElementById('login-form');
-        const registerForm = document.getElementById('register-form');
-        
-        if (loginTab && registerTab && loginForm && registerForm) {
-            registerTab.classList.remove('active');
-            loginTab.classList.add('active');
-            registerForm.style.display = 'none';
-            loginForm.style.display = 'block';
-        }
-    }
-
-    switchToRegister() {
-        const loginTab = document.getElementById('login-tab');
-        const registerTab = document.getElementById('register-tab');
-        const loginForm = document.getElementById('login-form');
-        const registerForm = document.getElementById('register-form');
-        
-        if (loginTab && registerTab && loginForm && registerForm) {
-            loginTab.classList.remove('active');
-            registerTab.classList.add('active');
-            loginForm.style.display = 'none';
-            registerForm.style.display = 'block';
-        }
-    }
-
-    // Função para debug - listar usuários no console
-    debugUsers() {
-        console.log('📊 Usuários no sistema:', this.users);
+    // Debug
+    debug() {
+        console.log('🔍 DEBUG:');
+        console.log('Usuários:', this.users);
+        console.log('Usuário atual:', this.currentUser);
+        console.log('LocalStorage:', localStorage.getItem('rpgUsers'));
     }
 }
 
-// Inicializar auth
-const auth = new SimpleAuth();
+// Inicializar sistema
+const auth = new AuthSystem();
 
-// Função global para debug
-window.debugAuth = () => {
-    auth.debugUsers();
-    console.log('👤 Usuário atual:', auth.currentUser);
-    console.log('💾 LocalStorage users:', localStorage.getItem('rpgUsers'));
+// Funções globais para debug
+window.debugAuth = () => auth.debug();
+window.resetAll = () => {
+    localStorage.clear();
+    sessionStorage.clear();
+    location.reload();
 };
