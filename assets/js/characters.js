@@ -29,7 +29,7 @@ function setupEventListeners() {
         });
     });
     
-    // Busca e filtros (se existirem na página)
+    // Busca e filtros
     const searchInput = document.getElementById('search-characters');
     if (searchInput) {
         searchInput.addEventListener('input', filterCharacters);
@@ -45,7 +45,7 @@ function setupEventListeners() {
         filterLevel.addEventListener('change', filterCharacters);
     }
     
-    // Botão salvar rápido (se existir)
+    // Botão salvar rápido
     const quickSaveBtn = document.getElementById('quick-save');
     if (quickSaveBtn) {
         quickSaveBtn.addEventListener('click', function() {
@@ -54,7 +54,7 @@ function setupEventListeners() {
         });
     }
     
-    // Botão importar (se existir)
+    // Botão importar
     const importCharacterBtn = document.getElementById('import-character');
     if (importCharacterBtn) {
         importCharacterBtn.addEventListener('click', importCharacters);
