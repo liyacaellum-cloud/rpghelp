@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mesa de Dados - RPG Master Ultra</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=MedievalSharp&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notification-text">Operação realizada com sucesso!</span>
+    </div>
+    
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <h1>RPG Master Ultra</h1>
+                <p>Sistema Definitivo de Gerenciamento de RPG</p>
+            </div>
+            
+            <div class="campaign-selector">
+                <label for="campaign">Campanha Ativa:</label>
+                <select id="campaign">
+                    <option value="default">Aventura Principal</option>
+                    <option value="side">Missão Secundária</option>
+                    <option value="new">Nova Campanha</option>
+                </select>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="personagens.html" class="nav-link">
+                        <i class="fas fa-users"></i>
+                        <span>Personagens</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="dados.html" class="nav-link active">
+                        <i class="fas fa-dice-d20"></i>
+                        <span>Mesa de Dados</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="iniciativa.html" class="nav-link">
+                        <i class="fas fa-list-ol"></i>
+                        <span>Iniciativa</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="bestiario.html" class="nav-link">
+                        <i class="fas fa-dragon"></i>
+                        <span>Bestiário</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="magias.html" class="nav-link">
+                        <i class="fas fa-magic"></i>
+                        <span>Grimório</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="anotacoes.html" class="nav-link">
+                        <i class="fas fa-scroll"></i>
+                        <span>Anotações</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="mapas.html" class="nav-link">
+                        <i class="fas fa-map"></i>
+                        <span>Mapas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="configuracoes.html" class="nav-link">
+                        <i class="fas fa-cog"></i>
+                        <span>Configurações</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h2>Mesa de Dados Virtual</h2>
+                <div class="user-actions">
+                    <button class="btn btn-gold" id="clear-history">
+                        <i class="fas fa-broom"></i>
+                        Limpar Histórico
+                    </button>
+                </div>
+            </div>
+            
+            <div class="dice-section">
+                <div class="dice-container">
+                    <div class="dice" data-sides="4">d4</div>
+                    <div class="dice" data-sides="6">d6</div>
+                    <div class="dice" data-sides="8">d8</div>
+                    <div class="dice" data-sides="10">d10</div>
+                    <div class="dice" data-sides="12">d12</div>
+                    <div class="dice" data-sides="20">d20</div>
+                    <div class="dice" data-sides="100">d100</div>
+                </div>
+                <div class="dice-result" id="dice-result"></div>
+                
+                <div class="custom-roll">
+                    <input type="number" id="custom-dice-count" min="1" max="10" value="1">
+                    <span>d</span>
+                    <input type="number" id="custom-dice-sides" min="2" max="100" value="6">
+                    <button class="btn" id="custom-roll">Rolar Dados</button>
+                    <button class="btn btn-secondary" id="advantage-roll">Vantagem</button>
+                    <button class="btn btn-secondary" id="disadvantage-roll">Desvantagem</button>
+                </div>
+                
+                <div class="roll-history">
+                    <h4>Histórico de Rolagens:</h4>
+                    <div id="roll-history-list">
+                        <!-- Roll history will be displayed here -->
+                    </div>
+                </div>
+            </div>
+            
+            <footer>
+                <p>RPG Master Ultra &copy; 2023 - Sistema Definitivo de Gerenciamento de RPG</p>
+            </footer>
+        </div>
+    </div>
+
+    <script src="assets/js/main.js"></script>
+    <script>
+        // Sistema de dados para a página de dados
+        document.addEventListener('DOMContentLoaded', function() {
+            setupDiceEventListeners();
+            loadRollHistory();
+        });
+
+        function setupDiceEventListeners() {
+            // Rolagem de dados individuais
+            document.querySelectorAll('.dice').forEach(dice => {
+                dice.addEventListener('click', function() {
+                    const sides = parseInt(this.getAttribute('data-sides'));
+                    rollDice(1, sides);
+                });
+            });
+
+            // Rolagem personalizada
+            const customRollBtn = document.getElementById('custom-roll');
+            if (customRollBtn) {
+                customRollBtn.addEventListener('click', function() {
+                    const count = parseInt(document.getElementById('custom-dice-count').value);
+                    const sides = parseInt(document.getElementById('custom-dice-sides').value);
+                    rollDice(count, sides);
+                });
+            }
+
+            // Rolagem com vantagem
+            const advantageRollBtn = document.getElementById('advantage-roll');
+            if (advantageRollBtn) {
+                advantageRollBtn.addEventListener('click', function() {
+                    const count = 2;
+                    const sides = 20;
+                    const rolls = [];
+                    
+                    for (let i = 0; i < count; i++) {
+                        const roll = Math.floor(Math.random() * sides) + 1;
+                        rolls.push(roll);
+                    }
+                    
+                    const total = Math.max(...rolls);
+                    const resultText = `Vantagem: 2d20 (${rolls.join(', ')}) = ${total}`;
+                    
+                    document.getElementById('dice-result').textContent = resultText;
+                    addToRollHistory(resultText);
+                    showNotification('Rolagem com vantagem realizada!');
+                });
+            }
+
+            // Rolagem com desvantagem
+            const disadvantageRollBtn = document.getElementById('disadvantage-roll');
+            if (disadvantageRollBtn) {
+                disadvantageRollBtn.addEventListener('click', function() {
+                    const count = 2;
+                    const sides = 20;
+                    const rolls = [];
+                    
+                    for (let i = 0; i < count; i++) {
+                        const roll = Math.floor(Math.random() * sides) + 1;
+                        rolls.push(roll);
+                    }
+                    
+                    const total = Math.min(...rolls);
+                    const resultText = `Desvantagem: 2d20 (${rolls.join(', ')}) = ${total}`;
+                    
+                    document.getElementById('dice-result').textContent = resultText;
+                    addToRollHistory(resultText);
+                    showNotification('Rolagem com desvantagem realizada!');
+                });
+            }
+
+            // Limpar histórico
+            const clearHistoryBtn = document.getElementById('clear-history');
+            if (clearHistoryBtn) {
+                clearHistoryBtn.addEventListener('click', function() {
+                    if (confirm('Tem certeza que deseja limpar o histórico de rolagens?')) {
+                        localStorage.removeItem('rpgRollHistory');
+                        loadRollHistory();
+                        showNotification('Histórico de rolagens limpo!');
+                    }
+                });
+            }
+        }
+
+        function rollDice(count, sides) {
+            const diceResult = document.getElementById('dice-result');
+            diceResult.textContent = "Rolando...";
+            diceResult.style.opacity = '0.5';
+
+            document.querySelectorAll('.dice').forEach(dice => {
+                if (parseInt(dice.getAttribute('data-sides')) === sides || count > 1) {
+                    dice.classList.add('dice-rolling');
+                }
+            });
+
+            setTimeout(() => {
+                let results = [];
+                let total = 0;
+                
+                for (let i = 0; i < count; i++) {
+                    const roll = Math.floor(Math.random() * sides) + 1;
+                    results.push(roll);
+                    total += roll;
+                }
+                
+                let resultText = `Rolagem: ${count}d${sides} = `;
+                
+                if (count > 1) {
+                    resultText += `${results.join(' + ')} = ${total}`;
+                } else {
+                    resultText += total;
+                }
+                
+                diceResult.textContent = resultText;
+                diceResult.style.opacity = '1';
+                
+                document.querySelectorAll('.dice').forEach(dice => {
+                    dice.classList.remove('dice-rolling');
+                });
+                
+                addToRollHistory(resultText);
+                showNotification(`Rolagem de ${count}d${sides} realizada!`);
+            }, 500);
+        }
+
+        function addToRollHistory(rollText) {
+            let rollHistory = JSON.parse(localStorage.getItem('rpgRollHistory')) || [];
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            
+            rollHistory.unshift({
+                text: rollText,
+                time: timeString
+            });
+            
+            if (rollHistory.length > 50) {
+                rollHistory = rollHistory.slice(0, 50);
+            }
+            
+            localStorage.setItem('rpgRollHistory', JSON.stringify(rollHistory));
+            loadRollHistory();
+        }
+
+        function loadRollHistory() {
+            const rollHistoryList = document.getElementById('roll-history-list');
+            if (!rollHistoryList) return;
+            
+            const rollHistory = JSON.parse(localStorage.getItem('rpgRollHistory')) || [];
+            
+            if (rollHistory.length === 0) {
+                rollHistoryList.innerHTML = '<div class="roll-history-item">Nenhuma rolagem registrada ainda.</div>';
+                return;
+            }
+            
+            rollHistoryList.innerHTML = rollHistory.map(roll => {
+                return `<div class="roll-history-item">
+                    <span>${roll.text}</span>
+                    <span class="roll-time">${roll.time}</span>
+                </div>`;
+            }).join('');
+        }
+    </script>
+</body>
+</html>
