@@ -4,7 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RPG entre Amigos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #e74c3c;
+            --bronze: #cd7f32;
+            --gold: #ffd700;
+            --text: #ecf0f1;
+            --text-secondary: #bdc3c7;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --bg-dark: #1a1a2e;
+            --bg-card: #16213e;
+            --border: #34495e;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,44 +29,283 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background: #1a1a2e;
-            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-card) 100%);
+            color: var(--text);
             min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
             padding: 20px;
         }
 
+        /* Header */
         .header {
-            text-align: center;
-            padding: 20px;
-            background: #16213e;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem 2rem;
+            border-bottom: 2px solid var(--bronze);
+            margin-bottom: 2rem;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .logo {
-            font-size: 2rem;
-            color: #ffd700;
-            margin-bottom: 10px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--gold);
         }
 
+        .logo i {
+            margin-right: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: var(--bronze);
+            color: white;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Cards */
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-header h3 {
+            color: var(--gold);
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--bronze);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Character Cards */
+        .character-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .character-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .character-header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .character-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--gold);
+        }
+
+        .character-class {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .character-level {
+            background: var(--bronze);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .character-body {
+            padding: 1rem;
+        }
+
+        .character-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            color: var(--gold);
+        }
+
+        /* Resource Bars */
+        .resource-bars {
+            margin: 1rem 0;
+        }
+
+        .resource-bar {
+            margin-bottom: 0.5rem;
+        }
+
+        .resource-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .bar-container {
+            height: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .health-bar {
+            background: linear-gradient(90deg, #e74c3c, #f39c12);
+        }
+
+        .character-description {
+            margin: 1rem 0;
+            padding: 0.8rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            border-left: 3px solid var(--bronze);
+        }
+
+        /* Buttons */
         .btn {
-            background: #cd7f32;
+            background: var(--bronze);
             color: white;
             border: none;
-            padding: 15px 25px;
-            border-radius: 8px;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 1.1rem;
-            margin: 10px;
-            width: 200px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
         }
 
         .btn:hover {
-            background: #ffd700;
-            color: #1a1a2e;
+            background: var(--gold);
+            color: var(--primary);
+            transform: translateY(-2px);
         }
 
+        .btn-primary {
+            background: var(--accent);
+        }
+
+        .btn-primary:hover {
+            background: #c0392b;
+        }
+
+        /* Character Actions */
+        .character-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .action-btn {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+        }
+
+        .action-btn:hover {
+            background: var(--bronze);
+            color: white;
+        }
+
+        .action-btn.danger:hover {
+            background: var(--danger);
+        }
+
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -57,349 +313,605 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0, 0, 0, 0.8);
             z-index: 1000;
             align-items: center;
             justify-content: center;
         }
 
         .modal-content {
-            background: #16213e;
-            padding: 30px;
+            background: var(--bg-card);
             border-radius: 10px;
             width: 90%;
-            max-width: 400px;
-            border: 2px solid #cd7f32;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 2px solid var(--bronze);
         }
 
+        .modal-header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            color: var(--gold);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        /* Forms */
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-weight: 500;
         }
 
         .form-control {
             width: 100%;
-            padding: 12px;
-            background: #2c3e50;
-            border: 1px solid #34495e;
-            border-radius: 5px;
-            color: white;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text);
             font-size: 1rem;
         }
 
-        .tabs {
+        .form-control:focus {
+            outline: none;
+            border-color: var(--bronze);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-actions {
             display: flex;
-            margin-bottom: 20px;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
         }
 
-        .tab {
-            flex: 1;
+        /* Filters */
+        .filters {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .filter-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr auto;
+            gap: 1rem;
+            align-items: end;
+        }
+
+        /* Character List */
+        .character-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Badges */
+        .badge {
+            background: var(--accent);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        /* Login Section */
+        .login-section {
+            max-width: 400px;
+            margin: 2rem auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .login-header {
             text-align: center;
-            padding: 10px;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
+            margin-bottom: 2rem;
         }
 
-        .tab.active {
-            border-bottom-color: #cd7f32;
-            color: #ffd700;
+        .login-header h2 {
+            color: var(--gold);
+            margin-bottom: 0.5rem;
         }
 
+        .forgot-password {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .forgot-password a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .forgot-password a:hover {
+            color: var(--gold);
+            text-decoration: underline;
+        }
+
+        /* Notification */
         .notification {
             position: fixed;
             top: 20px;
             right: 20px;
-            background: #27ae60;
+            background: var(--success);
             color: white;
-            padding: 15px 20px;
+            padding: 1rem 1.5rem;
             border-radius: 5px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             z-index: 10000;
+            font-weight: bold;
         }
 
         .notification.error {
-            background: #e74c3c;
+            background: var(--danger);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .filter-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .character-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .character-actions {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo">🎮 RPG entre Amigos</div>
-        <p>Plataforma simples para suas aventuras de RPG</p>
-        <button class="btn" onclick="openModal()">Entrar / Registrar</button>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <i class="fas fa-dragon"></i>
+                RPG entre Amigos
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="active">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="personagens.html">
+                    <i class="fas fa-users"></i> Personagens
+                </a>
+                <a href="bestiario.html">
+                    <i class="fas fa-paw"></i> Bestiário
+                </a>
+                <a href="magias.html">
+                    <i class="fas fa-fire"></i> Magias
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="dashboard">
+            <div class="dashboard-header">
+                <h1>RPG entre Amigos</h1>
+                <p>Uma plataforma descontraída para gerenciar suas aventuras de RPG com os amigos</p>
+            </div>
+
+            <!-- Login Section -->
+            <div class="login-section">
+                <div class="login-header">
+                    <h2>Entrar no Sistema</h2>
+                    <p>Faça login para acessar seus personagens</p>
+                </div>
+
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-username">Usuário</label>
+                        <input type="text" id="login-username" class="form-control" placeholder="Digite seu usuário" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Senha</label>
+                        <input type="password" id="login-password" class="form-control" placeholder="Digite sua senha" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        <i class="fas fa-sign-in-alt"></i> Entrar
+                    </button>
+                    
+                    <div class="forgot-password">
+                        <a href="#" id="forgot-password-link">Esqueceu sua senha?</a>
+                    </div>
+                </form>
+
+                <div style="text-align: center; margin-top: 2rem; padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 8px;">
+                    <p style="margin-bottom: 0.5rem;"><strong>Primeira vez aqui?</strong></p>
+                    <button class="btn" id="show-register" style="width: 100%;">
+                        <i class="fas fa-user-plus"></i> Criar Nova Conta
+                    </button>
+                </div>
+
+                <div style="margin-top: 1rem; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; text-align: center;">
+                    <p style="font-size: 0.9rem; opacity: 0.8;">
+                        <strong>Conta do Mestre:</strong> admin / admin123
+                    </p>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="dashboard-grid" style="margin-top: 3rem;">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>🎭 Personagens</h3>
+                        <div class="card-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <p>Crie e gerencie seus personagens de RPG com fichas completas e detalhadas.</p>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>🎲 Dados</h3>
+                        <div class="card-icon">
+                            <i class="fas fa-dice"></i>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <p>Sistema de rolagem de dados integrado para suas aventuras.</p>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>📚 Bestiário</h3>
+                        <div class="card-icon">
+                            <i class="fas fa-paw"></i>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <p>Consulte monstros e criaturas para suas campanhas.</p>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>✨ Magias</h3>
+                        <div class="card-icon">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <p>Lista completa de magias e habilidades especiais.</p>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>👑 Mestre</h3>
+                        <div class="card-icon">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <p>Ferramentas especiais para o mestre da campanha.</p>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>💬 Comunidade</h3>
+                        <div class="card-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <p>Compartilhe suas aventuras com outros jogadores.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 
-    <div style="text-align: center; margin-top: 50px;">
-        <h2>Recursos Disponíveis</h2>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
-            <div style="background: #16213e; padding: 20px; border-radius: 10px;">
-                <div style="font-size: 2rem;">🎭</div>
-                <h3>Personagens</h3>
-                <p>Crie e gerencie seus personagens</p>
+    <!-- Register Modal -->
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Criar Nova Conta</h2>
+                <button class="close-modal">&times;</button>
             </div>
-            <div style="background: #16213e; padding: 20px; border-radius: 10px;">
-                <div style="font-size: 2rem;">🎲</div>
-                <h3>Dados</h3>
-                <p>Sistema de rolagem de dados</p>
-            </div>
-            <div style="background: #16213e; padding: 20px; border-radius: 10px;">
-                <div style="font-size: 2rem;">📚</div>
-                <h3>Bestiário</h3>
-                <p>Monstros e criaturas</p>
+            <div class="modal-body">
+                <form id="register-form">
+                    <div class="form-group">
+                        <label for="register-username">Nome de Usuário</label>
+                        <input type="text" id="register-username" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">Email</label>
+                        <input type="email" id="register-email" class="form-control" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="register-password">Senha</label>
+                            <input type="password" id="register-password" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-confirm-password">Confirmar Senha</label>
+                            <input type="password" id="register-confirm-password" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn close-modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-user-plus"></i> Criar Conta
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
-    <!-- Modal de Login/Registro -->
-    <div id="authModal" class="modal">
+    <!-- Forgot Password Modal -->
+    <div id="forgot-password-modal" class="modal">
         <div class="modal-content">
-            <div style="text-align: center; margin-bottom: 20px;">
-                <h2>Junte-se à Turma!</h2>
-                <button onclick="closeModal()" style="background: none; border: none; color: white; font-size: 1.5rem; position: absolute; top: 10px; right: 10px; cursor: pointer;">×</button>
+            <div class="modal-header">
+                <h2>Recuperar Senha</h2>
+                <button class="close-modal">&times;</button>
             </div>
-
-            <div class="tabs">
-                <div class="tab active" onclick="showTab('login')">Entrar</div>
-                <div class="tab" onclick="showTab('register')">Registrar</div>
-            </div>
-
-            <!-- Formulário de Login -->
-            <div id="loginForm">
-                <div class="form-group">
-                    <input type="text" id="loginUser" class="form-control" placeholder="Usuário" value="admin">
+            <div class="modal-body">
+                <form id="forgot-password-form">
+                    <div class="form-group">
+                        <label for="recovery-email">Email da Conta</label>
+                        <input type="email" id="recovery-email" class="form-control" required placeholder="Digite o email da sua conta">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn close-modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-key"></i> Recuperar Senha
+                        </button>
+                    </div>
+                </form>
+                <div style="margin-top: 1rem; padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 5px;">
+                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem;"><strong>Como funciona:</strong></p>
+                    <p style="font-size: 0.8rem; opacity: 0.8;">Digite o email da sua conta e enviaremos sua senha atual por mensagem.</p>
                 </div>
-                <div class="form-group">
-                    <input type="password" id="loginPass" class="form-control" placeholder="Senha" value="rpg123">
-                </div>
-                <button class="btn" onclick="fazerLogin()" style="width: 100%;">Entrar</button>
-                <div style="text-align: center; margin-top: 10px;">
-                    <a href="#" onclick="showTab('recover')" style="color: #4ecdc4; text-decoration: none;">Esqueceu a senha?</a>
-                </div>
-            </div>
-
-            <!-- Formulário de Registro -->
-            <div id="registerForm" style="display: none;">
-                <div class="form-group">
-                    <input type="text" id="regUser" class="form-control" placeholder="Novo usuário">
-                </div>
-                <div class="form-group">
-                    <input type="email" id="regEmail" class="form-control" placeholder="Email">
-                </div>
-                <div class="form-group">
-                    <input type="password" id="regPass" class="form-control" placeholder="Senha">
-                </div>
-                <div class="form-group">
-                    <input type="password" id="regPass2" class="form-control" placeholder="Confirmar senha">
-                </div>
-                <button class="btn" onclick="fazerRegistro()" style="width: 100%;">Criar Conta</button>
-            </div>
-
-            <!-- Recuperação de Senha -->
-            <div id="recoverForm" style="display: none;">
-                <div class="form-group">
-                    <input type="email" id="recoverEmail" class="form-control" placeholder="Seu email">
-                </div>
-                <button class="btn" onclick="recuperarSenha()" style="width: 100%;">Recuperar Senha</button>
-                <div style="text-align: center; margin-top: 10px;">
-                    <a href="#" onclick="showTab('login')" style="color: #4ecdc4; text-decoration: none;">Voltar ao login</a>
-                </div>
-            </div>
-
-            <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 5px; margin-top: 15px; text-align: center;">
-                <p><strong>Conta do Mestre:</strong> admin / rpg123</p>
             </div>
         </div>
     </div>
 
     <script>
-        // Sistema SUPER SIMPLES - 100% funcional
-        let usuarios = JSON.parse(localStorage.getItem('rpgUsuarios')) || [];
-        
-        // Criar admin se não existir
-        if (!usuarios.find(u => u.usuario === 'admin')) {
-            usuarios.push({
-                usuario: 'admin',
-                senha: 'rpg123',
-                email: 'admin@rpg.com',
-                isAdmin: true
-            });
-            localStorage.setItem('rpgUsuarios', JSON.stringify(usuarios));
-        }
+        // Sistema de Autenticação Simples
+        let users = JSON.parse(localStorage.getItem('rpgUsers')) || [];
+        let currentUser = JSON.parse(sessionStorage.getItem('currentUser')) || null;
 
-        // Funções do Modal
-        function openModal() {
-            document.getElementById('authModal').style.display = 'flex';
-        }
+        // Inicializar sistema
+        function init() {
+            // Criar admin se não existir
+            if (!users.find(u => u.username === 'admin')) {
+                users.push({
+                    id: 'admin_001',
+                    username: 'admin',
+                    password: 'admin123',
+                    email: 'admin@rpg.com',
+                    profile: {
+                        avatar: '👑',
+                        bio: 'Mestre do RPG',
+                        favoriteClass: 'Mestre'
+                    },
+                    isAdmin: true,
+                    characters: [],
+                    createdAt: new Date().toISOString()
+                });
+                localStorage.setItem('rpgUsers', JSON.stringify(users));
+            }
 
-        function closeModal() {
-            document.getElementById('authModal').style.display = 'none';
-        }
-
-        function showTab(tabName) {
-            // Esconder todos os forms
-            document.getElementById('loginForm').style.display = 'none';
-            document.getElementById('registerForm').style.display = 'none';
-            document.getElementById('recoverForm').style.display = 'none';
+            setupEventListeners();
             
-            // Remover active de todas as tabs
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Mostrar form selecionado
-            if (tabName === 'login') {
-                document.getElementById('loginForm').style.display = 'block';
-                document.querySelectorAll('.tab')[0].classList.add('active');
-            } else if (tabName === 'register') {
-                document.getElementById('registerForm').style.display = 'block';
-                document.querySelectorAll('.tab')[1].classList.add('active');
-            } else if (tabName === 'recover') {
-                document.getElementById('recoverForm').style.display = 'block';
+            // Se já estiver logado, redirecionar para dashboard
+            if (currentUser) {
+                window.location.href = 'dashboard.html';
             }
         }
 
-        // Login - FUNCIONA!
-        function fazerLogin() {
-            const usuario = document.getElementById('loginUser').value;
-            const senha = document.getElementById('loginPass').value;
-            
-            const user = usuarios.find(u => u.usuario === usuario && u.senha === senha);
-            
+        // Configurar event listeners
+        function setupEventListeners() {
+            // Login form
+            document.getElementById('login-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                handleLogin();
+            });
+
+            // Register form
+            document.getElementById('register-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                handleRegister();
+            });
+
+            // Forgot password form
+            document.getElementById('forgot-password-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                handlePasswordRecovery();
+            });
+
+            // Show register modal
+            document.getElementById('show-register').addEventListener('click', function() {
+                document.getElementById('register-modal').style.display = 'flex';
+            });
+
+            // Forgot password link
+            document.getElementById('forgot-password-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('forgot-password-modal').style.display = 'flex';
+            });
+
+            // Close modals
+            document.querySelectorAll('.close-modal').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.modal').forEach(modal => {
+                        modal.style.display = 'none';
+                    });
+                });
+            });
+
+            // Close modal when clicking outside
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // Handle login
+        function handleLogin() {
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+
+            const user = users.find(u => u.username === username && u.password === password);
+
             if (user) {
-                mostrarNotificacao('🎮 Login feito com sucesso!');
+                currentUser = user;
+                sessionStorage.setItem('currentUser', JSON.stringify(user));
+                showNotification('Login realizado com sucesso!', 'success');
+                
                 setTimeout(() => {
                     window.location.href = 'dashboard.html';
                 }, 1000);
             } else {
-                mostrarNotificacao('❌ Usuário ou senha incorretos!', 'error');
+                showNotification('Usuário ou senha incorretos!', 'error');
             }
         }
 
-        // Registro - FUNCIONA!
-        function fazerRegistro() {
-            const usuario = document.getElementById('regUser').value;
-            const email = document.getElementById('regEmail').value;
-            const senha = document.getElementById('regPass').value;
-            const senha2 = document.getElementById('regPass2').value;
-            
-            if (!usuario || !email || !senha) {
-                mostrarNotificacao('❌ Preencha todos os campos!', 'error');
+        // Handle register
+        function handleRegister() {
+            const username = document.getElementById('register-username').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+
+            // Validações
+            if (password !== confirmPassword) {
+                showNotification('As senhas não coincidem!', 'error');
                 return;
             }
-            
-            if (senha !== senha2) {
-                mostrarNotificacao('❌ Senhas não coincidem!', 'error');
+
+            if (users.find(u => u.username === username)) {
+                showNotification('Nome de usuário já existe!', 'error');
                 return;
             }
-            
-            if (usuarios.find(u => u.usuario === usuario)) {
-                mostrarNotificacao('❌ Usuário já existe!', 'error');
+
+            if (users.find(u => u.email === email)) {
+                showNotification('Email já cadastrado!', 'error');
                 return;
             }
-            
+
             // Criar novo usuário
-            usuarios.push({
-                usuario: usuario,
-                senha: senha,
-                email: email,
-                isAdmin: false
-            });
-            
-            localStorage.setItem('rpgUsuarios', JSON.stringify(usuarios));
-            mostrarNotificacao('🎉 Conta criada com sucesso!');
-            
-            // Login automático
-            setTimeout(() => {
-                window.location.href = 'dashboard.html';
-            }, 1500);
+            const newUser = {
+                id: 'user_' + Date.now(),
+                username,
+                email,
+                password,
+                profile: {
+                    avatar: '😊',
+                    bio: 'Novo aventureiro!',
+                    favoriteClass: ''
+                },
+                isAdmin: false,
+                characters: [],
+                createdAt: new Date().toISOString()
+            };
+
+            users.push(newUser);
+            localStorage.setItem('rpgUsers', JSON.stringify(users));
+
+            showNotification('Conta criada com sucesso! Faça login.', 'success');
+            document.getElementById('register-modal').style.display = 'none';
+            document.getElementById('register-form').reset();
         }
 
-        // Recuperar senha - FUNCIONA!
-        function recuperarSenha() {
-            const email = document.getElementById('recoverEmail').value;
-            const user = usuarios.find(u => u.email === email);
-            
+        // Handle password recovery
+        function handlePasswordRecovery() {
+            const email = document.getElementById('recovery-email').value;
+            const user = users.find(u => u.email === email);
+
             if (user) {
-                mostrarNotificacao(`🔑 Senha do ${user.usuario}: ${user.senha}`);
-                showTab('login');
+                showNotification(`Senha para ${user.username}: ${user.password}`, 'success');
+                document.getElementById('forgot-password-modal').style.display = 'none';
+                document.getElementById('forgot-password-form').reset();
             } else {
-                mostrarNotificacao('❌ Email não encontrado!', 'error');
+                showNotification('Email não encontrado!', 'error');
             }
         }
 
-        // Sistema de notificações
-        function mostrarNotificacao(mensagem, tipo = 'success') {
-            // Remover notificações antigas
+        // Show notification
+        function showNotification(message, type = 'success') {
+            // Remove existing notifications
             document.querySelectorAll('.notification').forEach(n => n.remove());
-            
-            const notificacao = document.createElement('div');
-            notificacao.className = `notification ${tipo === 'error' ? 'error' : ''}`;
-            notificacao.textContent = mensagem;
-            document.body.appendChild(notificacao);
-            
+
+            const notification = document.createElement('div');
+            notification.className = `notification ${type === 'error' ? 'error' : ''}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
             setTimeout(() => {
-                notificacao.remove();
+                notification.remove();
             }, 4000);
         }
 
-        // Fechar modal clicando fora
-        document.getElementById('authModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
-        });
-
-        // Criar dashboard básico se não existir
-        if (!localStorage.getItem('dashboardCriado')) {
-            const dashboardHTML = `<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - RPG entre Amigos</title>
-    <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            background: #1a1a2e; 
-            color: white; 
-            margin: 0; 
-            padding: 20px; 
-        }
-        .container { max-width: 800px; margin: 0 auto; text-align: center; }
-        .card { background: #16213e; padding: 30px; border-radius: 10px; margin: 20px 0; }
-        .btn { 
-            background: #cd7f32; 
-            color: white; 
-            padding: 15px 25px; 
-            border: none; 
-            border-radius: 8px; 
-            text-decoration: none; 
-            display: inline-block; 
-            margin: 10px; 
-            cursor: pointer;
-        }
-        .btn:hover { background: #ffd700; color: #1a1a2e; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>🎮 Dashboard do RPG</h1>
-        <div class="card">
-            <h2>Bem-vindo ao RPG entre Amigos!</h2>
-            <p>Seu dashboard está funcionando perfeitamente!</p>
-            <a href="index.html" class="btn">Voltar para Home</a>
-            <button class="btn" onclick="sair()">Sair da Conta</button>
-        </div>
-    </div>
-    <script>
-        function sair() {
-            window.location.href = 'index.html';
-        }
-    </script>
-</body>
-</html>`;
-            localStorage.setItem('dashboardCriado', 'true');
-        }
-
-        console.log('✅ Sistema RPG carregado! Tudo funcionando!');
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
