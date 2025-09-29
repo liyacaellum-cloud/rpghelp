@@ -22,12 +22,14 @@ function setupEventListeners() {
     }
     
     // Fechar modal
-    const closeModalBtn = document.querySelector('.close-modal');
-    if (closeModalBtn) {
-        closeModalBtn.addEventListener('click', closeCharacterModal);
-    }
+    const closeModalBtns = document.querySelectorAll('.close-modal');
+    closeModalBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.getElementById('character-modal').style.display = 'none';
+        });
+    });
     
-    // Busca e filtros
+    // Busca e filtros (se existirem na página)
     const searchInput = document.getElementById('search-characters');
     if (searchInput) {
         searchInput.addEventListener('input', filterCharacters);
@@ -43,7 +45,7 @@ function setupEventListeners() {
         filterLevel.addEventListener('change', filterCharacters);
     }
     
-    // Botão salvar rápido
+    // Botão salvar rápido (se existir)
     const quickSaveBtn = document.getElementById('quick-save');
     if (quickSaveBtn) {
         quickSaveBtn.addEventListener('click', function() {
@@ -52,7 +54,7 @@ function setupEventListeners() {
         });
     }
     
-    // Botão importar
+    // Botão importar (se existir)
     const importCharacterBtn = document.getElementById('import-character');
     if (importCharacterBtn) {
         importCharacterBtn.addEventListener('click', importCharacters);
@@ -270,7 +272,7 @@ function rollInitiativeForCharacter(index) {
         const character = characters[index];
         const initiativeRoll = Math.floor(Math.random() * 20) + 1;
         
-        // Salvar na iniciativa (se estiver na página de iniciativa)
+        // Salvar na iniciativa
         let initiativeList = loadFromLocalStorage('rpgInitiative') || [];
         initiativeList.push({
             name: character.name,
@@ -283,7 +285,7 @@ function rollInitiativeForCharacter(index) {
         
         showNotification(`${character.name} rolou ${initiativeRoll} para iniciativa!`);
         
-        // Se estiver na página de iniciativa, redirecionar
+        // Se não estiver na página de iniciativa, perguntar se quer ir
         if (!window.location.pathname.includes('iniciativa.html')) {
             setTimeout(() => {
                 if (confirm(`${character.name} rolou ${initiativeRoll} para iniciativa! Deseja ir para a página de iniciativa?`)) {
