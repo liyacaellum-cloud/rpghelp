@@ -28,27 +28,22 @@ function initParticles() {
         const particle = document.createElement('div');
         particle.className = 'particle';
         
-        // Posição aleatória
         const posX = Math.random() * 100;
         const posY = Math.random() * 100;
         particle.style.left = `${posX}%`;
         particle.style.top = `${posY}%`;
         
-        // Tamanho aleatório
         const size = Math.random() * 4 + 1;
         particle.style.width = `${size}px`;
         particle.style.height = `${size}px`;
         
-        // Cor aleatória
         const colors = ['#ffd700', '#e94560', '#9b59b6', '#cd7f32'];
         const color = colors[Math.floor(Math.random() * colors.length)];
         particle.style.backgroundColor = color;
         
-        // Opacidade aleatória
         const opacity = Math.random() * 0.5 + 0.1;
         particle.style.opacity = opacity;
         
-        // Animação
         const duration = Math.random() * 30 + 20;
         const x = Math.random() * 2 - 1;
         const y = Math.random() * 2 - 1;
@@ -132,18 +127,6 @@ function importData(callback) {
     input.click();
 }
 
-// Utilitários de data/hora
-function getCurrentTime() {
-    const now = new Date();
-    return now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-}
-
-function formatDuration(minutes) {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return `${hours}h ${mins}m`;
-}
-
 // Inicialização geral
 document.addEventListener('DOMContentLoaded', function() {
     initParticles();
@@ -168,16 +151,3 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-
-// Validação de formulários
-function validateForm(formData) {
-    const errors = [];
-    
-    for (const [key, value] of Object.entries(formData)) {
-        if (!value && value !== 0) {
-            errors.push(`O campo ${key} é obrigatório`);
-        }
-    }
-    
-    return errors;
-}
