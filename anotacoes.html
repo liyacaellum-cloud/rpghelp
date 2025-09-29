@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anotações - RPG Master Ultra</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=MedievalSharp&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notification-text">Operação realizada com sucesso!</span>
+    </div>
+    
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <h1>RPG Master Ultra</h1>
+                <p>Sistema Definitivo de Gerenciamento de RPG</p>
+            </div>
+            
+            <div class="campaign-selector">
+                <label for="campaign">Campanha Ativa:</label>
+                <select id="campaign">
+                    <option value="default">Aventura Principal</option>
+                    <option value="side">Missão Secundária</option>
+                    <option value="new">Nova Campanha</option>
+                </select>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="personagens.html" class="nav-link">
+                        <i class="fas fa-users"></i>
+                        <span>Personagens</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="dados.html" class="nav-link">
+                        <i class="fas fa-dice-d20"></i>
+                        <span>Mesa de Dados</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="iniciativa.html" class="nav-link">
+                        <i class="fas fa-list-ol"></i>
+                        <span>Iniciativa</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="bestiario.html" class="nav-link">
+                        <i class="fas fa-dragon"></i>
+                        <span>Bestiário</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="magias.html" class="nav-link">
+                        <i class="fas fa-magic"></i>
+                        <span>Grimório</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="anotacoes.html" class="nav-link active">
+                        <i class="fas fa-scroll"></i>
+                        <span>Anotações</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="mapas.html" class="nav-link">
+                        <i class="fas fa-map"></i>
+                        <span>Mapas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="configuracoes.html" class="nav-link">
+                        <i class="fas fa-cog"></i>
+                        <span>Configurações</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h2>Anotações da Sessão</h2>
+                <div class="user-actions">
+                    <button class="btn" id="save-notes">
+                        <i class="fas fa-save"></i>
+                        Salvar Anotações
+                    </button>
+                    <button class="btn btn-secondary" id="export-notes">
+                        <i class="fas fa-download"></i>
+                        Exportar
+                    </button>
+                </div>
+            </div>
+            
+            <div class="notes-section">
+                <textarea id="session-notes" placeholder="Anote aqui informações importantes da sessão, como tesouros encontrados, NPCs conhecidos, objetivos da missão, eventos importantes..."></textarea>
+            </div>
+            
+            <footer>
+                <p>RPG Master Ultra &copy; 2023 - Sistema Definitivo de Gerenciamento de RPG</p>
+            </footer>
+        </div>
+    </div>
+
+    <script src="assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadNotes();
+            setupNotesEventListeners();
+        });
+
+        function setupNotesEventListeners() {
+            // Salvar anotações
+            const saveNotesBtn = document.getElementById('save-notes');
+            if (saveNotesBtn) {
+                saveNotesBtn.addEventListener('click', saveNotes);
+            }
+
+            // Exportar anotações
+            const exportNotesBtn = document.getElementById('export-notes');
+            if (exportNotesBtn) {
+                exportNotesBtn.addEventListener('click', exportNotes);
+            }
+        }
+
+        function loadNotes() {
+            const notes = localStorage.getItem('rpgNotes') || '';
+            document.getElementById('session-notes').value = notes;
+        }
+
+        function saveNotes() {
+            const notes = document.getElementById('session-notes').value;
+            localStorage.setItem('rpgNotes', notes);
+            showNotification('Anotações salvas com sucesso!');
+        }
+
+        function exportNotes() {
+            const notes = document.getElementById('session-notes').value;
+            const dataStr = JSON.stringify({ notes: notes }, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'rpg-notes.json';
+            link.click();
+            
+            URL.revokeObjectURL(url);
+            showNotification('Anotações exportadas com sucesso!');
+        }
+    </script>
+</body>
+</html>
