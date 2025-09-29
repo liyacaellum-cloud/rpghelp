@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - RPG entre Amigos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Manter o CSS anterior e adicionar: */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            border: 1px solid #34495e;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #cd7f32;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .profile-info h2 {
+            color: #ffd700;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-card {
+            background: rgba(0,0,0,0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffd700;
+            display: block;
+        }
+
+        .dice-roller {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .dice-result {
+            background: rgba(0,0,0,0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .dice-roll {
+            background: #4ecdc4;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            margin: 0.2rem;
+            display: inline-block;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .action-card {
+            background: rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #34495e;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            border-color: #cd7f32;
+        }
+
+        .action-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #ffd700;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <i class="fas fa-dragon"></i>
+                RPG entre Amigos
+            </div>
+            
+            <div class="user-section">
+                <div class="user-info">
+                    <div class="user-avatar" id="user-avatar">😊</div>
+                    <div>
+                        <div class="username" id="username-display"></div>
+                        <div class="user-badge" id="user-badge">Aventureiro</div>
+                    </div>
+                </div>
+                <a href="personagens.html" class="btn">
+                    <i class="fas fa-users"></i> Personagens
+                </a>
+                <a href="comunidade.html" class="btn">
+                    <i class="fas fa-users"></i> Comunidade
+                </a>
+                <button class="btn logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <!-- Perfil do Usuário -->
+        <div class="profile-header">
+            <div class="profile-avatar" id="profile-avatar">😊</div>
+            <div class="profile-info">
+                <h2 id="profile-username">Usuário</h2>
+                <p id="profile-bio">Bio do usuário aparecerá aqui</p>
+                <div class="profile-stats">
+                    <div class="stat-card">
+                        <span class="stat-number" id="char-count">0</span>
+                        <span>Personagens</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="notes-count">0</span>
+                        <span>Anotações</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number" id="friends-count">0</span>
+                        <span>Amigos</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ações Rápidas -->
+        <div class="quick-actions">
+            <div class="action-card" onclick="openCharacterModal()">
+                <div class="action-icon">➕</div>
+                <h3>Novo Personagem</h3>
+                <p>Criar novo personagem</p>
+            </div>
+            
+            <div class="action-card" onclick="location.href='personagens.html'">
+                <div class="action-icon">🎭</div>
+                <h3>Meus Personagens</h3>
+                <p>Ver todos personagens</p>
+            </div>
+
+            <div class="action-card" onclick="location.href='bestiario.html'">
+                <div class="action-icon">🐲</div>
+                <h3>Bestiário</h3>
+                <p>Consultar monstros</p>
+            </div>
+
+            <div class="action-card" onclick="location.href='magias.html'">
+                <div class="action-icon">✨</div>
+                <h3>Magias</h3>
+                <p>Lista de magias</p>
+            </div>
+
+            <div class="action-card" onclick="openDiceRoller()">
+                <div class="action-icon">🎲</div>
+                <h3>Rolar Dados</h3>
+                <p>Rolagem rápida</p>
+            </div>
+
+            <div class="action-card" onclick="location.href='anotacoes.html'">
+                <div class="action-icon">📝</div>
+                <h3>Anotações</h3>
+                <p>Notas pessoais</p>
+            </div>
+        </div>
+
+        <!-- Rolagem de Dados -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h3>🎲 Rolagem Rápida de Dados</h3>
+            </div>
+            <div class="card-content">
+                <div class="dice-roller">
+                    <input type="text" id="dice-formula" placeholder="Ex: 2d6+3" class="form-control">
+                    <button class="btn" onclick="rollDice()">
+                        <i class="fas fa-dice"></i> Rolar
+                    </button>
+                </div>
+                <div id="dice-result"></div>
+                
+                <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button class="btn" onclick="quickRoll('1d20')">1d20</button>
+                    <button class="btn" onclick="quickRoll('2d6')">2d6</button>
+                    <button class="btn" onclick="quickRoll('1d100')">1d100</button>
+                    <button class="btn" onclick="quickRoll('4d6')">4d6</button>
+                    <button class="btn" onclick="quickRoll('1d8+2')">1d8+2</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Personagens Recentes -->
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h3>👤 Meus Personagens Recentes</h3>
+                <a href="personagens.html" class="btn">Ver Todos</a>
+            </div>
+            <div class="card-content">
+                <div id="my-characters-list">
+                    <!-- Personagens serão carregados aqui -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Personagem (usar o mesmo do código anterior) -->
+
+    <script src="auth-simple.js"></script>
+    <script src="characters-social.js"></script>
+    <script>
+        // Verificar login
+        if (!auth.currentUser) {
+            window.location.href = 'index.html';
+        }
+
+        // Carregar dashboard
+        function loadDashboard() {
+            // Atualizar perfil
+            document.getElementById('profile-avatar').textContent = auth.currentUser.profile.avatar;
+            document.getElementById('profile-username').textContent = auth.currentUser.username;
+            document.getElementById('profile-bio').textContent = auth.currentUser.profile.bio || 'Nenhuma bio definida';
+            
+            // Atualizar contadores
+            const myChars = socialChars.getMyCharacters();
+            document.getElementById('char-count').textContent = myChars.length;
+            
+            // Carregar personagens recentes
+            renderMyCharacters(myChars.slice(0, 3));
+        }
+
+        function renderMyCharacters(characters) {
+            const container = document.getElementById('my-characters-list');
+            if (characters.length === 0) {
+                container.innerHTML = '<p>Nenhum personagem criado ainda. <button class="btn" onclick="openCharacterModal()">Criar primeiro personagem</button></p>';
+                return;
+            }
+
+            container.innerHTML = characters.map(char => `
+                <div class="character-card">
+                    <div class="character-header">
+                        <div>
+                            <div class="character-name">${char.name}</div>
+                            <div class="character-class">${char.race || ''} ${char.class || ''}</div>
+                        </div>
+                        <div class="character-level">Nv. ${char.level}</div>
+                    </div>
+                    <div class="character-body">
+                        <div class="character-stats">
+                            <div class="stat">
+                                <span>PV:</span>
+                                <span class="stat-value">${char.hp}/${char.maxHp}</span>
+                            </div>
+                            <div class="stat">
+                                <span>CA:</span>
+                                <span class="stat-value">${char.ac}</span>
+                            </div>
+                        </div>
+                        <div class="character-actions">
+                            <button class="action-btn" onclick="editCharacter('${char.id}')">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                            <button class="action-btn" onclick="location.href='personagens.html'">
+                                <i class="fas fa-eye"></i> Ver
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Sistema de rolagem de dados
+        function rollDice() {
+            const formula = document.getElementById('dice-formula').value;
+            if (!formula) return;
+
+            const result = calculateDiceRoll(formula);
+            const resultDiv = document.getElementById('dice-result');
+            
+            resultDiv.innerHTML = `
+                <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                    <strong>🎲 ${auth.currentUser.username} rolou: ${formula}</strong><br>
+                    <div style="font-size: 2rem; font-weight: bold; color: #ffd700;">${result.total}</div>
+                    <div style="margin-top: 0.5rem;">
+                        ${result.rolls.map(roll => 
+                            `<span class="dice-roll">${roll.dice}: ${roll.value}</span>`
+                        ).join(' + ')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function quickRoll(formula) {
+            document.getElementById('dice-formula').value = formula;
+            rollDice();
+        }
+
+        function calculateDiceRoll(formula) {
+            // Implementação simples de rolagem
+            const diceRegex = /(\d+)d(\d+)/g;
+            let match;
+            let rolls = [];
+            let total = 0;
+
+            while ((match = diceRegex.exec(formula)) !== null) {
+                const count = parseInt(match[1]);
+                const sides = parseInt(match[2]);
+                
+                for (let i = 0; i < count; i++) {
+                    const roll = Math.floor(Math.random() * sides) + 1;
+                    rolls.push({ dice: `${count}d${sides}`, value: roll });
+                    total += roll;
+                }
+            }
+
+            // Adicionar modificadores
+            const modifierMatch = formula.match(/[+-]\d+/g);
+            if (modifierMatch) {
+                modifierMatch.forEach(mod => {
+                    total += parseInt(mod);
+                });
+            }
+
+            return { rolls, total, formula };
+        }
+
+        // Carregar quando a página carregar
+        document.addEventListener('DOMContentLoaded', loadDashboard);
+    </script>
+</body>
+</html>
