@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciativa - RPG Master Ultra</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=MedievalSharp&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notification-text">Operação realizada com sucesso!</span>
+    </div>
+    
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <h1>RPG Master Ultra</h1>
+                <p>Sistema Definitivo de Gerenciamento de RPG</p>
+            </div>
+            
+            <div class="campaign-selector">
+                <label for="campaign">Campanha Ativa:</label>
+                <select id="campaign">
+                    <option value="default">Aventura Principal</option>
+                    <option value="side">Missão Secundária</option>
+                    <option value="new">Nova Campanha</option>
+                </select>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="personagens.html" class="nav-link">
+                        <i class="fas fa-users"></i>
+                        <span>Personagens</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="dados.html" class="nav-link">
+                        <i class="fas fa-dice-d20"></i>
+                        <span>Mesa de Dados</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="iniciativa.html" class="nav-link active">
+                        <i class="fas fa-list-ol"></i>
+                        <span>Iniciativa</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="bestiario.html" class="nav-link">
+                        <i class="fas fa-dragon"></i>
+                        <span>Bestiário</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="magias.html" class="nav-link">
+                        <i class="fas fa-magic"></i>
+                        <span>Grimório</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="anotacoes.html" class="nav-link">
+                        <i class="fas fa-scroll"></i>
+                        <span>Anotações</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="mapas.html" class="nav-link">
+                        <i class="fas fa-map"></i>
+                        <span>Mapas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="configuracoes.html" class="nav-link">
+                        <i class="fas fa-cog"></i>
+                        <span>Configurações</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h2>Controle de Iniciativa</h2>
+                <div class="user-actions">
+                    <button class="btn" id="add-to-initiative">
+                        <i class="fas fa-plus"></i>
+                        Adicionar
+                    </button>
+                    <button class="btn btn-secondary" id="next-turn">
+                        <i class="fas fa-forward"></i>
+                        Próximo Turno
+                    </button>
+                    <button class="btn btn-gold" id="start-combat">
+                        <i class="fas fa-fist-raised"></i>
+                        Iniciar Combate
+                    </button>
+                    <button class="btn btn-secondary" id="reset-initiative">
+                        <i class="fas fa-redo"></i>
+                        Reiniciar
+                    </button>
+                </div>
+            </div>
+            
+            <div class="initiative-tracker">
+                <div class="combat-info">
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-value" id="combat-round">1</span>
+                            <span class="stat-label">Rodada</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="combat-turn">1</span>
+                            <span class="stat-label">Turno</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="combat-time">00:00</span>
+                            <span class="stat-label">Tempo</span>
+                        </div>
+                    </div>
+                </div>
+                <ul class="initiative-list" id="initiative-list">
+                    <!-- Initiative items will be loaded here -->
+                </ul>
+            </div>
+            
+            <footer>
+                <p>RPG Master Ultra &copy; 2023 - Sistema Definitivo de Gerenciamento de RPG</p>
+            </footer>
+        </div>
+    </div>
+    
+    <!-- Modal para Adicionar à Iniciativa -->
+    <div id="initiative-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Adicionar à Iniciativa</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="initiative-name">Nome</label>
+                <input type="text" id="initiative-name" required>
+            </div>
+            <div class="form-group">
+                <label for="initiative-roll">Valor da Iniciativa</label>
+                <input type="number" id="initiative-roll" min="1" max="50" required>
+            </div>
+            <div class="form-group">
+                <button class="btn" id="add-initiative" style="width: 100%;">Adicionar à Iniciativa</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/main.js"></script>
+    <script>
+        // Sistema de iniciativa
+        let initiativeList = [];
+        let currentTurn = 0;
+        let currentRound = 1;
+        let combatStartTime = null;
+        let combatTimer = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadInitiative();
+            setupInitiativeEventListeners();
+            updateCombatTimer();
+        });
+
+        function setupInitiativeEventListeners() {
+            // Adicionar à iniciativa
+            const addToInitiativeBtn = document.getElementById('add-to-initiative');
+            if (addToInitiativeBtn) {
+                addToInitiativeBtn.addEventListener('click', function() {
+                    document.getElementById('initiative-modal').style.display = 'flex';
+                });
+            }
+
+            // Adicionar iniciativa do modal
+            const addInitiativeBtn = document.getElementById('add-initiative');
+            if (addInitiativeBtn) {
+                addInitiativeBtn.addEventListener('click', addToInitiative);
+            }
+
+            // Próximo turno
+            const nextTurnBtn = document.getElementById('next-turn');
+            if (nextTurnBtn) {
+                nextTurnBtn.addEventListener('click', nextTurn);
+            }
+
+            // Iniciar combate
+            const startCombatBtn = document.getElementById('start-combat');
+            if (startCombatBtn) {
+                startCombatBtn.addEventListener('click', startCombat);
+            }
+
+            // Reiniciar iniciativa
+            const resetInitiativeBtn = document.getElementById('reset-initiative');
+            if (resetInitiativeBtn) {
+                resetInitiativeBtn.addEventListener('click', resetInitiative);
+            }
+
+            // Fechar modal
+            const closeModalBtns = document.querySelectorAll('.close-modal');
+            closeModalBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.getElementById('initiative-modal').style.display = 'none';
+                });
+            });
+        }
+
+        function loadInitiative() {
+            initiativeList = JSON.parse(localStorage.getItem('rpgInitiative')) || [];
+            currentTurn = parseInt(localStorage.getItem('rpgCurrentTurn')) || 0;
+            currentRound = parseInt(localStorage.getItem('rpgCurrentRound')) || 1;
+            combatStartTime = localStorage.getItem('rpgCombatStartTime');
+            
+            updateInitiativeDisplay();
+            updateCombatInfo();
+        }
+
+        function saveInitiative() {
+            localStorage.setItem('rpgInitiative', JSON.stringify(initiativeList));
+            localStorage.setItem('rpgCurrentTurn', currentTurn.toString());
+            localStorage.setItem('rpgCurrentRound', currentRound.toString());
+            if (combatStartTime) {
+                localStorage.setItem('rpgCombatStartTime', combatStartTime);
+            }
+        }
+
+        function updateInitiativeDisplay() {
+            const initiativeListEl = document.getElementById('initiative-list');
+            if (!initiativeListEl) return;
+
+            if (initiativeList.length === 0) {
+                initiativeListEl.innerHTML = '<div class="dashboard-card"><p>Nenhum participante na iniciativa. Clique em "Adicionar" para começar.</p></div>';
+                return;
+            }
+
+            // Ordenar por iniciativa (maior para menor)
+            initiativeList.sort((a, b) => b.initiative - a.initiative);
+
+            initiativeListEl.innerHTML = initiativeList.map((item, index) => {
+                return `<li class="initiative-item ${index === currentTurn ? 'current-turn' : ''}">
+                    <span class="initiative-name">${item.name}</span>
+                    <span class="initiative-value">${item.initiative}</span>
+                </li>`;
+            }).join('');
+        }
+
+        function updateCombatInfo() {
+            document.getElementById('combat-round').textContent = currentRound;
+            document.getElementById('combat-turn').textContent = currentTurn + 1;
+        }
+
+        function addToInitiative() {
+            const name = document.getElementById('initiative-name').value;
+            const initiative = parseInt(document.getElementById('initiative-roll').value);
+
+            if (!name || isNaN(initiative)) {
+                showNotification('Preencha todos os campos corretamente.', 'error');
+                return;
+            }
+
+            initiativeList.push({ name, initiative });
+            saveInitiative();
+            updateInitiativeDisplay();
+            document.getElementById('initiative-modal').style.display = 'none';
+
+            // Limpar campos
+            document.getElementById('initiative-name').value = '';
+            document.getElementById('initiative-roll').value = '';
+
+            showNotification(`${name} adicionado à iniciativa com valor ${initiative}!`);
+        }
+
+        function nextTurn() {
+            if (initiativeList.length === 0) {
+                showNotification('Não há participantes na iniciativa.', 'warning');
+                return;
+            }
+
+            currentTurn = (currentTurn + 1) % initiativeList.length;
+
+            // Se voltou ao primeiro, incrementa a rodada
+            if (currentTurn === 0) {
+                currentRound++;
+            }
+
+            updateCombatInfo();
+            saveInitiative();
+            updateInitiativeDisplay();
+
+            showNotification(`Turno de ${initiativeList[currentTurn].name}!`);
+        }
+
+        function startCombat() {
+            if (initiativeList.length === 0) {
+                showNotification('Adicione participantes à iniciativa antes de iniciar o combate.', 'error');
+                return;
+            }
+
+            currentTurn = 0;
+            currentRound = 1;
+            combatStartTime = new Date().toISOString();
+
+            updateCombatInfo();
+            saveInitiative();
+            updateInitiativeDisplay();
+
+            // Iniciar temporizador
+            if (combatTimer) clearInterval(combatTimer);
+            combatTimer = setInterval(updateCombatTimer, 1000);
+
+            showNotification('Combate iniciado! Boa sorte!', 'success');
+        }
+
+        function resetInitiative() {
+            if (confirm('Tem certeza que deseja reiniciar a iniciativa?')) {
+                initiativeList = [];
+                currentTurn = 0;
+                currentRound = 1;
+                combatStartTime = null;
+
+                if (combatTimer) {
+                    clearInterval(combatTimer);
+                    combatTimer = null;
+                }
+
+                updateCombatInfo();
+                saveInitiative();
+                updateInitiativeDisplay();
+                document.getElementById('combat-time').textContent = '00:00';
+
+                showNotification('Iniciativa reiniciada!');
+            }
+        }
+
+        function updateCombatTimer() {
+            if (!combatStartTime) return;
+
+            const start = new Date(combatStartTime);
+            const now = new Date();
+            const diff = now - start;
+
+            const minutes = Math.floor(diff / 60000);
+            const seconds = Math.floor((diff % 60000) / 1000);
+
+            document.getElementById('combat-time').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+    </script>
+</body>
+</html>
