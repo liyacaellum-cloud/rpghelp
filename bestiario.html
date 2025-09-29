@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bestiário - RPG Master Ultra</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=MedievalSharp&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notification-text">Operação realizada com sucesso!</span>
+    </div>
+    
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <h1>RPG Master Ultra</h1>
+                <p>Sistema Definitivo de Gerenciamento de RPG</p>
+            </div>
+            
+            <div class="campaign-selector">
+                <label for="campaign">Campanha Ativa:</label>
+                <select id="campaign">
+                    <option value="default">Aventura Principal</option>
+                    <option value="side">Missão Secundária</option>
+                    <option value="new">Nova Campanha</option>
+                </select>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="personagens.html" class="nav-link">
+                        <i class="fas fa-users"></i>
+                        <span>Personagens</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="dados.html" class="nav-link">
+                        <i class="fas fa-dice-d20"></i>
+                        <span>Mesa de Dados</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="iniciativa.html" class="nav-link">
+                        <i class="fas fa-list-ol"></i>
+                        <span>Iniciativa</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="bestiario.html" class="nav-link active">
+                        <i class="fas fa-dragon"></i>
+                        <span>Bestiário</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="magias.html" class="nav-link">
+                        <i class="fas fa-magic"></i>
+                        <span>Grimório</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="anotacoes.html" class="nav-link">
+                        <i class="fas fa-scroll"></i>
+                        <span>Anotações</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="mapas.html" class="nav-link">
+                        <i class="fas fa-map"></i>
+                        <span>Mapas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="configuracoes.html" class="nav-link">
+                        <i class="fas fa-cog"></i>
+                        <span>Configurações</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h2>Bestiário</h2>
+                <div class="user-actions">
+                    <button class="btn" id="add-monster">
+                        <i class="fas fa-plus"></i>
+                        Adicionar Monstro
+                    </button>
+                    <button class="btn btn-secondary" id="filter-monsters">
+                        <i class="fas fa-filter"></i>
+                        Filtrar
+                    </button>
+                </div>
+            </div>
+            
+            <div class="character-grid" id="bestiary-list">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Bestiário Vazio</h3>
+                        <div class="card-icon">
+                            <i class="fas fa-dragon"></i>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <p>Adicione monstros ao seu bestiário para acessá-los rapidamente durante as sessões.</p>
+                        <button class="btn" style="margin-top: 1rem;" id="add-sample-monsters">
+                            <i class="fas fa-magic"></i>
+                            Adicionar Monstros de Exemplo
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <footer>
+                <p>RPG Master Ultra &copy; 2023 - Sistema Definitivo de Gerenciamento de RPG</p>
+            </footer>
+        </div>
+    </div>
+
+    <script src="assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const addSampleBtn = document.getElementById('add-sample-monsters');
+            if (addSampleBtn) {
+                addSampleBtn.addEventListener('click', function() {
+                    showNotification('Funcionalidade em desenvolvimento!', 'warning');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
